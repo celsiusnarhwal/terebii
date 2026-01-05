@@ -134,14 +134,6 @@ The `air_date` and `air_date_utc` variables can be formatted using [`strftime()`
 
 For all format codes, see [strftime.org](https://strftime.org).
 
-## Apprise Configurations
-
-Terebii only supports Apprise URLs. If you want to use an [Apprise configuration file](https://github.com/caronc/apprise/wiki/config),
-you'll need to set up your own [Apprise server](https://github.com/caronc/apprise-api) and set
-`TEREBII_NOTIFICATION_URL` to `apprise://apprise.example.com/cfg/{config}`, where `apprise.example.com` is the address
-of your Apprise server and `{config}` is the name of the configuration you want to use.
-
-
 ## Configuration
 
 Terebii can be configured via the following environment variables:
