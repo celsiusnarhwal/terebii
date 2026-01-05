@@ -73,7 +73,7 @@ For example:
 
 <details>
 <summary><code>title.jinja</code></summary>
-
+<br>
 ```
 {{ show_name }} is Airing
 ```
@@ -82,7 +82,7 @@ For example:
 
 <details>
 <summary><code>body.jinja</code></summary>
-
+<br>
 ```
 S{{ season_num }} E{{ episode_num }} — {{ title }} is now airing on {{ network }}.
 ```
