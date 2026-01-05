@@ -47,7 +47,7 @@ services:
       - TEREBII_SONARR_API_KEY=your-sonarr-api-key
       - TEREBI_NOTIFICATION_URL=some://apprise.url
     volumes:
-      - {TEREBII_TEMPLATE_DIR}/app/terebii/templates
+      - {TEREBII_TEMPLATE_DIR}:/app/terebii/templates
 ```
 
 ### Docker CLI
@@ -107,18 +107,18 @@ The above examples are also the default values for each template if either one i
 
 The following variables are provided to notification templates.
 
-| **Variable**    | **Type**                                                                                      | **Description**                                                                                      |
-|-----------------|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| `title`         | String ([`str`](https://docs.python.org/3/library/stdtypes.html#int))                         | The title of the episode.                                                                            |
-| `show_name`     | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                         | The name of the show.                                                                                |
-| `runtime`       | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                       | The runtime of the episode in minutes, rounded down to the nearest minute.                           |
-| `network`       | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                         | The network the show airs on.                                                                        |
-| `episode_num`   | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                       | The episode number (e.g., `8`).                                                                      |
-| `episode_num00` | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                         | The two-digit episode number (e.g. `08`). Note that unlike `episode_num`, this variable is a string. |
-| `season_num`    | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                       | The season number (e.g., `1`).                                                                       |
-| `season_num00`  | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                         | The two-digit season number (e.g. `01`). Note that unlike `season_num`, this variable is a string.   |                                                                         |                                                                                                     |
-| `air_date`      | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#available-types)) | The air date of the episode in the time zone of the connected Sonarr instance.                       |
-| `air_date_utc`  | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#available-types)) | The air date of the episode in UTC.                                                                  |                                                                                               |                                                                                                      |
+| **Variable**    | **Type**                                                                                       | **Description**                                                                                      |
+|-----------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| `title`         | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The title of the episode.                                                                            |
+| `show_name`     | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The name of the show.                                                                                |
+| `runtime`       | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                        | The runtime of the episode in minutes, rounded down to the nearest minute.                           |
+| `network`       | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The network the show airs on.                                                                        |
+| `episode_num`   | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                        | The episode number (e.g., `8`).                                                                      |
+| `episode_num00` | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The two-digit episode number (e.g. `08`). Note that unlike `episode_num`, this variable is a string. |
+| `season_num`    | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                        | The season number (e.g., `1`).                                                                       |
+| `season_num00`  | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The two-digit season number (e.g. `01`). Note that unlike `season_num`, this variable is a string.   |                                                                         |                                                                                                     |
+| `air_date`      | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in the time zone of the connected Sonarr instance.                       |
+| `air_date_utc`  | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in UTC.                                                                  |                                                                                               |                                                                                                      |
 
 All template variables are [Python](https://python.org) objects and can be manipulated within notification templates
 in all of the ways that Jinja supports.
