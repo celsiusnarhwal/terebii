@@ -21,7 +21,7 @@ notifications, you don't need to mount this directory.
 
 | **Name**             | **Description**                                                                             | **Example**                                                                        |
 |----------------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| `latest`             | The latest stable version of Snowflake.                                                     | `ghcr.io/celsiusnarhwal/terebii:latest`                                            |
+| `latest`             | The latest stable version of Terebii.                                                       | `ghcr.io/celsiusnarhwal/terebii:latest`                                            |
 | Major version number | The latest release of this major version of Terebii. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/terebii:1`<br/>`ghcr.io/celsiusnarhwal/terebii:v1`         |
 | Minor version number | The latest release of this minor version of Terebii. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/terebii:1.0`<br/>`ghcr.io/celsiusnarhwal/terebii:v1.0`     |
 | Exact version number | This version of Terebii exactly. May be optionally prefixed with a `v`.                     | `ghcr.io/celsiusnarhwal/terebii:1.0.0`<br/>`ghcr.io/celsiusnarhwal/terebii:v1.0.0` |
