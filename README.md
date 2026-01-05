@@ -9,9 +9,9 @@ Pushover, ntfy, Discord, IFTTT, and [many, many, more](https://github.com/caronc
 Docker is the only supported way of running Terebii. You must set the `TEREBII_SONARR_URL`, `TEREBII_SONAR_API_KEY`,
 and `TEREBII_NOTIFICATION_URL` environment variables; see [Configuration](#configuration).
 
-In the below examples, `{TEREBII_TEMPLATE_DIR}` is a path on your machine where Terebii will look for notification
-templates (see [Customizing Notifications](#customizing-notifications)). If you don't intend to customize Terebii's
-notifications, you don't need to mount this directory.
+In the below examples, `{TEREBII_TEMPLATE_DIR}` is a placeholder for a path on your machine where Terebii will look 
+for notification templates (see [Customizing Notifications](#customizing-notifications)). If you don't intend to 
+customize Terebii's notifications, you don't need to mount this directory.
 
 <hr>
 
