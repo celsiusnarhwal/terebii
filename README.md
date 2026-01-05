@@ -10,7 +10,7 @@ Docker is the only supported way of running Terebii. You must set the `TEREBII_S
 and `TEREBII_NOTIFICATION_URL` environment variables; see [Configuration](#configuration).
 
 In the below examples, `{TEREBII_TEMPLATE_DIR}` is a path on your machine where Terebii will look for notification
-templates [see [Customizing Notifications](#customizing-notifications)]. If you don't intend to customize Terebii's
+templates (see [Customizing Notifications](#customizing-notifications)). If you don't intend to customize Terebii's
 notifications, you don't need to mount this directory.
 
 <hr>
