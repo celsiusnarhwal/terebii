@@ -73,7 +73,7 @@ templates in `TEREBII_TEMPLATE_DIR`. Notification titles can be customized by cr
 For example:
 
 <details>
-<summary><code>title.jinja</code></summary>
+<summary>Title template (<code>title.jinja</code>)</summary>
 <br>
 
 The following template:
@@ -89,7 +89,7 @@ will result in a notification title similar to this:
 </details>
 
 <details>
-<summary><code>body.jinja</code></summary>
+<summary>Body template (<code>body.jinja</code>)</summary>
 <br>
 
 The following template:
