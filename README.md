@@ -75,9 +75,15 @@ For example:
 <summary><code>title.jinja</code></summary>
 <br>
 
+The following template:
+
 ```
 {{ show_name }} is Airing
 ```
+
+will result in a notification title similar to this:
+
+> Sound! Euphonium is Airing
 
 </details>
 
@@ -85,9 +91,15 @@ For example:
 <summary><code>body.jinja</code></summary>
 <br>
 
+The following template:
+<br>
 ```
 S{{ season_num }} E{{ episode_num }} — {{ title }} is now airing on {{ network }}.
 ```
+
+will result in a notification body similar to this:
+
+> S1 E8 — Festival Triangle is now airing on NHK Educational TV.
 
 </details>
 
