@@ -19,13 +19,16 @@ notifications, you don't need to mount this directory.
 <summary>Supported tags</summary>
 <br>
 
-| **Name**             | **Description**                                                                               | **Example**                                                                            |
-|----------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| `latest`             | The latest stable version of Snowflake.                                                       | `ghcr.io/celsiusnarhwal/snowflake:latest`                                              |
-| Major version number | The latest release of this major version of Snowflake. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/snowflake:1`<br/>`ghcr.io/celsiusnarhwal/snowflake:v1`         |
-| Minor version number | The latest release of this minor version of Snowflake. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/snowflake:1.0`<br/>`ghcr.io/celsiusnarhwal/snowflake:v1.0`     |
-| Exact version number | This version of Snowflake exactly. May be optionally prefixed with a `v`.                     | `ghcr.io/celsiusnarhwal/snowflake:1.0.0`<br/>`ghcr.io/celsiusnarhwal/snowflake:v1.0.0` |
-| `edge`               | The latest commit to Snowflake's `main` branch. Unstable.                                     | `ghcr.io/celsiusnarhwal/snowflake:edge`                                                |
+| **Name**             | **Description**                                                                             | **Example**                                                                        |
+|----------------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| `latest`             | The latest stable version of Snowflake.                                                     | `ghcr.io/celsiusnarhwal/terebii:latest`                                            |
+| Major version number | The latest release of this major version of Terebii. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/terebii:1`<br/>`ghcr.io/celsiusnarhwal/terebii:v1`         |
+| Minor version number | The latest release of this minor version of Terebii. May be optionally prefixed with a `v`. | `ghcr.io/celsiusnarhwal/terebii:1.0`<br/>`ghcr.io/celsiusnarhwal/terebii:v1.0`     |
+| Exact version number | This version of Terebii exactly. May be optionally prefixed with a `v`.                     | `ghcr.io/celsiusnarhwal/terebii:1.0.0`<br/>`ghcr.io/celsiusnarhwal/terebii:v1.0.0` |
+| `edge`               | The latest commit to Terebii's `main` branch. Unstable.                                     | `ghcr.io/celsiusnarhwal/terebii:edge`                                              |                                                                                             |                                                                                    |
+
+All Terebii images are distributed both with and without a Redis server. If you would prefer an image without one,
+append `-noredis` to the tag of your choice.
 
 </details>
 
@@ -127,7 +130,7 @@ Terebii can be configured via the following environment variables:
 | `TEREBII_SONARR_API_KEY`   | String   | The API key for the Sonarr instance reachable at `TEREBII_SONARR_URL`.                                                                                                                                                                                                                                                  | Yes           |                               |
 | `TEREBII_NOTIFICATION_URL` | String   | An [Apprise URL](https://github.com/caronc/apprise/wiki/URLBasics) for Terebii to send notifications to.                                                                                                                                                                                                                | Yes           |                               |
 | `TEREBII_REFRESH_INTERVAL` | String   | A [Go duration string](https://pkg.go.dev/time#ParseDuration) representing the interval at which Terebii should pull new episodes from Sonarr's calendar. In addition to the standard Go units, you can use `d` for day, `w` for week, `mm` for month, and `y` for year.[^1] Must be greater than or equal to 1 second. | No            | `1m`                          |
-| `TEREBII_INCLUDE_POSTERS`  | Boolean  | Whether to include show posters as notification attachmenets when possible.[^2]                                                                                                                                                                                                                                         | No            | `false                        |
+| `TEREBII_INCLUDE_POSTERS`  | Boolean  | Whether to include show posters as notification attachmenets when possible.[^2]                                                                                                                                                                                                                                         | No            | `false`                        |
 | `TEREBII_REDIS_URL`        | String   | The URL of a Redis instance. If specified, Terebii will use this Redis instance instead of its integrated one. Must begin with `redis://` or `rediss://`.                                                                                                                                                               | No            | `redis://localhost`           |
 
 [^1]: 1 day = 24 hours, 1 week = 7 days, 1 month = 30 days, and 1 year = 365 days.
