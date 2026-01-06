@@ -59,7 +59,7 @@ async def send_notification(episode_id: int):
         resp.raise_for_status()
         episode = resp.json()
 
-        logger.info(f"Retrieved episode with ID {episode_id}")
+        logger.debug(f"Retrieved episode with ID {episode_id}")
 
     title = episode["title"]
     show_name = episode["series"]["title"]
@@ -75,6 +75,18 @@ async def send_notification(episode_id: int):
 
     air_date = pendulum.parse(episode["airDate"])
     air_date_utc = pendulum.parse(episode["airDateUtc"])
+
+    episode_log_str = (
+        f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
+    )
+
+    if not (episode["monitored"] or settings().include_unmonitored):
+        logger.debug(
+            f"A notification was scheduled for {episode_log_str} but it is not monitored and "
+            f"TEREBII_INCLUDE_UNMONITORED is False, so it is being skipped"
+        )
+
+        return
 
     variables = {
         "title": title,
@@ -115,10 +127,6 @@ async def send_notification(episode_id: int):
     notifier = Apprise()
     notifier.add(settings().notification_url.encoded_string())
 
-    episode_log_str = (
-        f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
-    )
-
     logger.info(f"Sending notification for {episode_log_str}")
 
     result = await notifier.async_notify(
@@ -144,7 +152,12 @@ async def get_episodes():
         logger.info(f"Retrieving calendar from {settings().sonarr_url}...")
         resp = await sonarr.get(
             "/calendar",
-            params={"start": start.to_iso8601_string(), "end": end.to_iso8601_string()},
+            params={
+                "start": start.to_iso8601_string(),
+                "end": end.to_iso8601_string(),
+                "unmonitored": settings().include_unmonitored,
+                "includeSeries": True,
+            },
         )
 
         resp.raise_for_status()
@@ -157,9 +170,8 @@ async def get_episodes():
     for episode in episodes:
         if air_date := episode.get("airDateUtc"):
             logger.debug(
-                f"Adding notification for S{episode['seasonNumber']} "
-                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ("
-                f"Series ID: {episode['seriesId']}, Episode ID: {episode['id']}"
+                f"Adding notification for {episode['series']['title']} S{episode['seasonNumber']} "
+                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ({episode['id']})"
             )
 
             await (
