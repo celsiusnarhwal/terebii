@@ -1,0 +1,6 @@
+*
+!terebii/
+!pyproject.toml
+!uv.lock
+!README.md
+!s6/
