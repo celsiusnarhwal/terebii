@@ -134,7 +134,7 @@ The `air_date` and `air_date_utc` variables can be formatted using [`strftime()`
 {{ air_date.strftime("%Y-%m-%d %H:%M:%S") }}
 ```
 
-For all format codes, see [strftime.org](https://strftime.org).
+For all format codes, see [strfti.me](https://strfti.me).
 
 ## Configuration
 
