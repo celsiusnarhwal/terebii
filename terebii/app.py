@@ -59,6 +59,8 @@ async def send_notification(episode_id: int):
         resp.raise_for_status()
         episode = resp.json()
 
+        logger.info(f"Retrieved episode with ID {episode_id}")
+
     title = episode["title"]
     show_name = episode["series"]["title"]
     runtime = episode["runtime"]
