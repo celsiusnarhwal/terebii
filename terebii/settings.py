@@ -1,8 +1,18 @@
+import sys
 import typing as t
 from functools import cache
 
 import durationpy
-from pydantic import AnyUrl, BeforeValidator, HttpUrl, RedisDsn, SecretStr, Field
+from loguru import logger
+from pydantic import (
+    AnyUrl,
+    BeforeValidator,
+    Field,
+    HttpUrl,
+    RedisDsn,
+    SecretStr,
+    field_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 Duration = t.Annotated[
@@ -21,6 +31,19 @@ class TerebiiSettings(BaseSettings):
     refresh_interval: Duration = Field("1m", ge=1)
     include_posters: bool = False
     redis_url: RedisDsn = "redis://localhost"
+    log_level: t.Literal["debug", "info", "warning", "error"] = "info"
+
+    @field_validator("log_level")
+    @classmethod
+    def setup_logging(cls, v):
+        logger.remove()
+        logger.add(
+            sink=sys.stderr,
+            level=v.upper(),
+            format="[terebii] {time} | {level} — {message}",
+        )
+
+        return v
 
 
 @cache

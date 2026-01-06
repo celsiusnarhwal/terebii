@@ -5,6 +5,7 @@ import inflect as ifl
 import pendulum
 from apprise import Apprise
 from jinja2 import ChoiceLoader, Environment, FileSystemLoader
+from loguru import logger
 from taskiq import TaskiqScheduler
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import (
@@ -42,10 +43,17 @@ inflect = ifl.engine()
 
 @broker.task
 async def send_notification(episode_id: int):
+    logger.debug(f"Preparing to send notification for episode with ID {episode_id}")
+
     async with utils.sonarr() as sonarr:
+        logger.debug(f"Retreiving episode with ID {episode_id}")
+
         resp = await sonarr.get(f"/calendar/{episode_id}")
 
         if resp.status_code == 404:
+            logger.debug(
+                f"Episode with ID {episode_id} not found. Maybe the show was deleted?"
+            )
             return
 
         resp.raise_for_status()
@@ -63,7 +71,7 @@ async def send_notification(episode_id: int):
     season_num00 = str(season_num).zfill(2)
     season_ordinal = inflect.ordinal(season_num)
 
-    air_date_local = pendulum.parse(episode["airDate"])
+    air_date = pendulum.parse(episode["airDate"])
     air_date_utc = pendulum.parse(episode["airDateUtc"])
 
     variables = {
@@ -77,9 +85,11 @@ async def send_notification(episode_id: int):
         "season_num": season_num,
         "season_num00": season_num00,
         "season_ordinal": season_ordinal,
-        "air_date": datetime.fromisoformat(air_date_local.to_iso8601_string()),
+        "air_date": datetime.fromisoformat(air_date.to_iso8601_string()),
         "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
     }
+
+    logger.debug(f"Rendering notification templates with variables: {variables}")
 
     notification_title = templates.get_template("title.jinja").render(variables)
     notification_body = templates.get_template("body.jinja").render(variables)
@@ -97,16 +107,28 @@ async def send_notification(episode_id: int):
         )
 
         if poster:
+            logger.debug(f"Including poster with URL {poster}")
             attach = (poster,)
 
     notifier = Apprise()
     notifier.add(settings().notification_url.encoded_string())
 
-    await notifier.async_notify(
+    episode_log_str = (
+        f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
+    )
+
+    logger.info(f"Sending notification for {episode_log_str}")
+
+    result = await notifier.async_notify(
         title=notification_title,
         body=notification_body,
         attach=attach,
     )
+
+    if result:
+        logger.debug(f"Notification successful: {episode_log_str}")
+    else:
+        logger.error(f"Notification failed: {episode_log_str}")
 
 
 @broker.task(schedule=[{"interval": settings().refresh_interval}])
@@ -114,7 +136,10 @@ async def get_episodes():
     start = pendulum.now("UTC")
     end = start + pendulum.Duration(weeks=1)
 
+    logger.debug(f"Airing window: {start} to {end}")
+
     async with utils.sonarr() as sonarr:
+        logger.info(f"Retrieving calendar from {settings().sonarr_url}...")
         resp = await sonarr.get(
             "/calendar",
             params={"start": start.to_iso8601_string(), "end": end.to_iso8601_string()},
@@ -123,13 +148,24 @@ async def get_episodes():
         resp.raise_for_status()
         episodes = resp.json()
 
+        logger.info("Calendar retrieved!")
+
     await redis_source.startup()
 
     for episode in episodes:
         if air_date := episode.get("airDateUtc"):
-            await send_notification.schedule_by_time(
-                source=redis_source,
-                time=pendulum.parse(air_date),
-                episode_id=episode["id"],
-                task_id=str(episode["id"]),
+            logger.debug(
+                f"Adding notification for S{episode['seasonNumber']} "
+                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ("
+                f"Series ID: {episode['seriesId']}, Episode ID: {episode['id']}"
+            )
+
+            await (
+                send_notification.kicker()
+                .with_task_id(str(episode["id"]))
+                .schedule_by_time(
+                    source=redis_source,
+                    time=air_date,
+                    episode_id=episode["id"],
+                )
             )
