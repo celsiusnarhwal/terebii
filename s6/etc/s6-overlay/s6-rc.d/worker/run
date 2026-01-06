@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+uv run --directory /app/ taskiq worker terebii.app:broker
