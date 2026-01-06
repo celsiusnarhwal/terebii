@@ -46,7 +46,7 @@ services:
     environment:
       - TEREBII_SONARR_URL=sonarr.example.com
       - TEREBII_SONARR_API_KEY=your-sonarr-api-key
-      - TEREBI_NOTIFICATION_URL=some://apprise.url
+      - TEREBII_NOTIFICATION_URL=some://apprise.url
     volumes:
       - {TEREBII_TEMPLATE_DIR}:/app/terebii/templates
 ```
@@ -59,7 +59,7 @@ docker run -d \
   --restart unless-stopped \
   -e TEREBII_SONARR_URL=sonarr.example.com \
   -e TEREBII_SONARR_API_KEY=your-sonarr-api-key \
-  -e TEREBI_NOTIFICATION_URL=some://apprise.url \
+  -e TEREBII_NOTIFICATION_URL=some://apprise.url \
   -v {TEREBII_TEMPLATE_DIR}:/app/terebii/templates \
   ghcr.io/celsiusnarhwal/terebii:latest
 ```
