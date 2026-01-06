@@ -28,8 +28,8 @@ customize Terebii's notifications, you don't need to mount this directory.
 | Exact version number | This version of Terebii exactly. May be optionally prefixed with a `v`.                     | `ghcr.io/celsiusnarhwal/terebii:1.0.0`<br/>`ghcr.io/celsiusnarhwal/terebii:v1.0.0` |
 | `edge`               | The latest commit to Terebii's `main` branch. Unstable.                                     | `ghcr.io/celsiusnarhwal/terebii:edge`                                              |                                                                                             |                                                                                    |
 
-All Terebii images are distributed both with and without a Redis server. If you have your own Redis server
-an image that doesn't include one, append `-noredis` to the tag of your choice.[^3]
+All Terebii images are distributed both with and without a Redis server. If you have your own Redis server and would
+prefer an image that doesn't include one, append `-noredis` to the tag of your choice.[^3]
 
 </details>
 
