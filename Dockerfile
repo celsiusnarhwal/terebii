@@ -11,7 +11,7 @@ RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.xz /tmp
 RUN tar -C / -Jxpf /tmp/s6-overlay-${S6_ARCH}.tar.xz
 
-COPY s6/etc/ /etc
+COPY s6/etc/ /etc/
 
 WORKDIR /etc/s6-overlay/s6-rc.d/user/contents.d
 
