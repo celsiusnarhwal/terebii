@@ -41,7 +41,7 @@ class TerebiiSettings(BaseSettings):
         logger.add(
             sink=sys.stderr,
             level=v.upper(),
-            format="[terebii] {time} | {level} — {message}",
+            format="[Terebii] {time} | {level} — {message}",
         )
 
         return v
