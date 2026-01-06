@@ -66,7 +66,7 @@ docker run -d \
 
 ## Customizing Notifications
 
-You can customize the content of Terebii's notifications by creating [Jinja](https://jinja.palletsprojects.com/en/stable/)
+You can customize the content of Terebii's notifications by creating [Jinja](https://jinja.palletsprojects.com/en/stable/intro/)
 templates in `TEREBII_TEMPLATE_DIR`. Notification titles can be customized by creating a template named
 `title.jinja`; notification bodies can be customized by creating a template named `body.jinja`.
 
