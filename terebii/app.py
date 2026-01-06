@@ -14,6 +14,7 @@ from taskiq_redis import (
 
 from terebii import utils
 from terebii.settings import settings
+import inflect as ifl
 
 backend = RedisAsyncResultBackend(redis_url=settings().redis_url.encoded_string())
 
@@ -36,6 +37,8 @@ template_loader = ChoiceLoader(
 
 templates = Environment(loader=template_loader)
 
+inflect = ifl.engine()
+
 
 @broker.task
 async def send_notification(episode_id: int):
@@ -55,8 +58,10 @@ async def send_notification(episode_id: int):
 
     episode_num = episode["episodeNumber"]
     episode_num00 = str(episode_num).zfill(2)
+    episode_ordinal = inflect.ordinal(episode_num)
     season_num = episode["seasonNumber"]
     season_num00 = str(season_num).zfill(2)
+    season_ordinal = inflect.ordinal(season_num)
 
     air_date_local = pendulum.parse(episode["airDate"])
     air_date_utc = pendulum.parse(episode["airDateUtc"])
@@ -68,8 +73,10 @@ async def send_notification(episode_id: int):
         "network": network,
         "episode_num": episode_num,
         "episode_num00": episode_num00,
+        "episode_ordinal": episode_ordinal,
         "season_num": season_num,
         "season_num00": season_num00,
+        "season_ordinal": season_ordinal,
         "air_date": datetime.fromisoformat(air_date_local.to_iso8601_string()),
         "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
     }
