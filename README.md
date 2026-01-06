@@ -106,7 +106,7 @@ will result in a notification body similar to this:
 
 The above examples are also the default values for each template if either one is not present.
 
-The following variables are provided to notification templates.
+The following variables are provided to notification templates:
 
 | **Variable**      | **Type**                                                                                       | **Description**                                                                                      |
 |-------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
