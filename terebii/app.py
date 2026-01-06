@@ -56,7 +56,9 @@ async def send_notification(episode_id: int):
             )
             return
 
-        resp.raise_for_status()
+        with logger.catch():
+            resp.raise_for_status()
+
         episode = resp.json()
 
         logger.debug(f"Retrieved episode with ID {episode_id}")
@@ -160,7 +162,9 @@ async def get_episodes():
             },
         )
 
-        resp.raise_for_status()
+        with logger.catch():
+            resp.raise_for_status()
+
         episodes = resp.json()
 
         logger.info("Calendar retrieved!")
