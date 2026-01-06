@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
+import inflect as ifl
 import pendulum
 from apprise import Apprise
 from jinja2 import ChoiceLoader, Environment, FileSystemLoader
@@ -14,7 +15,6 @@ from taskiq_redis import (
 
 from terebii import utils
 from terebii.settings import settings
-import inflect as ifl
 
 backend = RedisAsyncResultBackend(redis_url=settings().redis_url.encoded_string())
 
@@ -84,9 +84,6 @@ async def send_notification(episode_id: int):
     notification_title = templates.get_template("title.jinja").render(variables)
     notification_body = templates.get_template("body.jinja").render(variables)
 
-    notifier = Apprise()
-    notifier.add(settings().notification_url.encoded_string())
-
     attach = None
 
     if settings().include_posters:
@@ -101,6 +98,9 @@ async def send_notification(episode_id: int):
 
         if poster:
             attach = (poster,)
+
+    notifier = Apprise()
+    notifier.add(settings().notification_url.encoded_string())
 
     await notifier.async_notify(
         title=notification_title,
