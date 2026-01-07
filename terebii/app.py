@@ -164,6 +164,7 @@ async def get_episodes():
 
     async with utils.sonarr() as sonarr:
         logger.info(f"Retrieving calendar from {settings().sonarr_url}...")
+
         resp = await sonarr.get(
             "/calendar",
             params={
