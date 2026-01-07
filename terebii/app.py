@@ -180,7 +180,7 @@ async def get_episodes():
 
             await (
                 send_notification.kicker()
-                .with_task_id(str(episode["id"]))
+                .with_schedule_id(str(episode["id"]))
                 .schedule_by_time(
                     source=redis_source,
                     time=air_date,
