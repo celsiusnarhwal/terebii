@@ -13,6 +13,7 @@ from pydantic import (
     RedisDsn,
     SecretStr,
     field_validator,
+    Secret,
 )
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -34,7 +35,7 @@ class TerebiiSettings(BaseSettings):
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
     include_posters: bool = False
-    redis_url: RedisDsn = "redis://localhost"
+    redis_url: Secret[RedisDsn] = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error"] = "info"
 
     @field_validator("timezone", mode="before")
