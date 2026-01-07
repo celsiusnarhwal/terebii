@@ -11,9 +11,9 @@ from pydantic import (
     Field,
     HttpUrl,
     RedisDsn,
+    Secret,
     SecretStr,
     field_validator,
-    Secret,
 )
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_settings import BaseSettings, SettingsConfigDict
