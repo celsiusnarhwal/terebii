@@ -75,8 +75,8 @@ async def send_notification(episode_id: int):
     season_num00 = str(season_num).zfill(2)
     season_ordinal = inflect.ordinal(season_num)
 
-    air_date = pendulum.parse(episode["airDate"])
     air_date_utc = pendulum.parse(episode["airDateUtc"])
+    air_date = air_date_utc.in_tz(settings().timezone)
 
     episode_log_str = (
         f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
@@ -175,7 +175,7 @@ async def get_episodes():
         if air_date := episode.get("airDateUtc"):
             logger.debug(
                 f"Adding notification for {episode['series']['title']} S{episode['seasonNumber']} "
-                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ({episode['id']})"
+                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} UTC ({episode['id']})"
             )
 
             await (

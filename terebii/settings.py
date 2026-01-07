@@ -3,6 +3,7 @@ import typing as t
 from functools import cache
 
 import durationpy
+import pendulum
 from loguru import logger
 from pydantic import (
     AnyUrl,
@@ -13,6 +14,7 @@ from pydantic import (
     SecretStr,
     field_validator,
 )
+from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 Duration = t.Annotated[
@@ -28,11 +30,16 @@ class TerebiiSettings(BaseSettings):
     sonarr_url: HttpUrl
     sonarr_api_key: SecretStr
     notification_url: AnyUrl
+    timezone: TimeZoneName = None
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
     include_posters: bool = False
     redis_url: RedisDsn = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error"] = "info"
+
+    @field_validator("timezone", mode="before")
+    def validate_timezone(cls, v):
+        return v or pendulum.local_timezone().name
 
     @field_validator("log_level")
     @classmethod
