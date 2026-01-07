@@ -19,6 +19,9 @@ dependencies = [
     "taskiq-redis>=1.1.2",
 ]
 
+[tool.ruff.lint]
+extend-select = ["I"]
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
