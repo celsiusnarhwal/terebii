@@ -70,10 +70,14 @@ async def send_notification(episode_id: int):
 
     episode_num = episode["episodeNumber"]
     episode_num00 = str(episode_num).zfill(2)
+    episode_num_word = inflect.number_to_words(episode_num)
     episode_ordinal = inflect.ordinal(episode_num)
+    episode_ordinal_word = inflect.number_to_words(episode_ordinal)
     season_num = episode["seasonNumber"]
     season_num00 = str(season_num).zfill(2)
+    season_num_word = inflect.number_to_words(season_num)
     season_ordinal = inflect.ordinal(season_num)
+    season_ordinal_word = inflect.number_to_words(season_ordinal)
 
     air_date_utc = pendulum.parse(episode["airDateUtc"])
     air_date = air_date_utc.in_tz(settings().timezone)
@@ -98,9 +102,13 @@ async def send_notification(episode_id: int):
         "episode_num": episode_num,
         "episode_num00": episode_num00,
         "episode_ordinal": episode_ordinal,
+        "episode_num_word": episode_num_word,
+        "episode_ordinal_word": episode_ordinal_word,
         "season_num": season_num,
         "season_num00": season_num00,
         "season_ordinal": season_ordinal,
+        "season_num_word": season_num_word,
+        "season_ordinal_word": season_ordinal_word,
         "air_date": datetime.fromisoformat(air_date.to_iso8601_string()),
         "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
     }
