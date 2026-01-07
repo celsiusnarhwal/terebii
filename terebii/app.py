@@ -22,7 +22,7 @@ backend = RedisAsyncResultBackend(
 )
 
 broker = RedisStreamBroker(
-    url=settings().redis_url.encoded_string()
+    url=settings().redis_url.get_secret_value().encoded_string()
 ).with_result_backend(backend)
 
 redis_source = ListRedisScheduleSource(
