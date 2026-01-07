@@ -117,7 +117,9 @@ async def send_notification(episode_id: int):
         "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
     }
 
-    logger.debug(f"Rendering notification templates with variables: {variables}")
+    logger.debug(
+        f"Rendering notification templates for {episode_log_str} with variables: {variables}"
+    )
 
     notification_title = templates.get_template("title.jinja").render(variables)
     notification_body = templates.get_template("body.jinja").render(variables)
@@ -135,8 +137,10 @@ async def send_notification(episode_id: int):
         )
 
         if poster:
-            logger.debug(f"Including poster with URL {poster}")
+            logger.debug(f"Including poster with URL {poster} for {episode_log_str}")
             attach = (poster,)
+        else:
+            logger.debug(f"No poster found for {episode_log_str}")
 
     notifier = Apprise()
     notifier.add(settings().notification_url.encoded_string())
