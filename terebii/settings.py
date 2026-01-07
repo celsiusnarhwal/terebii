@@ -1,9 +1,9 @@
 import sys
 import typing as t
+from datetime import datetime
 from functools import cache
 
 import durationpy
-import pendulum
 from loguru import logger
 from pydantic import (
     AnyUrl,
@@ -31,7 +31,7 @@ class TerebiiSettings(BaseSettings):
     sonarr_url: HttpUrl
     sonarr_api_key: SecretStr
     notification_url: AnyUrl
-    timezone: TimeZoneName = None
+    timezone: TimeZoneName = Field(None, alias="TZ")
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
     include_posters: bool = False
@@ -40,7 +40,7 @@ class TerebiiSettings(BaseSettings):
 
     @field_validator("timezone", mode="before")
     def validate_timezone(cls, v):
-        return v or pendulum.local_timezone().name
+        return v or datetime.now().astimezone().tzname()
 
     @field_validator("log_level")
     @classmethod
