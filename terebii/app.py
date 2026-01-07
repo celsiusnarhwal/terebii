@@ -69,12 +69,12 @@ async def send_notification(episode_id: int):
     network = episode["series"]["network"]
 
     episode_num = episode["episodeNumber"]
-    episode_num00 = str(episode_num).zfill(2)
+    episode_num_00 = str(episode_num).zfill(2)
     episode_num_word = inflect.number_to_words(episode_num)
     episode_ordinal = inflect.ordinal(episode_num)
     episode_ordinal_word = inflect.number_to_words(episode_ordinal)
     season_num = episode["seasonNumber"]
-    season_num00 = str(season_num).zfill(2)
+    season_num_00 = str(season_num).zfill(2)
     season_num_word = inflect.number_to_words(season_num)
     season_ordinal = inflect.ordinal(season_num)
     season_ordinal_word = inflect.number_to_words(season_ordinal)
@@ -100,12 +100,12 @@ async def send_notification(episode_id: int):
         "runtime": runtime,
         "network": network,
         "episode_num": episode_num,
-        "episode_num00": episode_num00,
+        "episode_num_00": episode_num_00,
         "episode_ordinal": episode_ordinal,
         "episode_num_word": episode_num_word,
         "episode_ordinal_word": episode_ordinal_word,
         "season_num": season_num,
-        "season_num00": season_num00,
+        "season_num_00": season_num_00,
         "season_ordinal": season_ordinal,
         "season_num_word": season_num_word,
         "season_ordinal_word": season_ordinal_word,
