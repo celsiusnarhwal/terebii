@@ -763,7 +763,6 @@ wheels = [
 
 [[package]]
 name = "terebii"
-version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "apprise" },
@@ -775,6 +774,7 @@ dependencies = [
     { name = "pendulum" },
     { name = "pydantic-extra-types" },
     { name = "pydantic-settings" },
+    { name = "rich" },
     { name = "taskiq" },
     { name = "taskiq-redis" },
 ]
@@ -795,6 +795,7 @@ requires-dist = [
     { name = "pendulum", specifier = ">=3.1.0" },
     { name = "pydantic-extra-types", specifier = ">=2.11.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
+    { name = "rich", specifier = ">=14.2.0" },
     { name = "taskiq", specifier = ">=0.12.1" },
     { name = "taskiq-redis", specifier = ">=1.1.2" },
 ]
