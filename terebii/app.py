@@ -6,7 +6,6 @@ import pendulum
 from apprise import Apprise
 from jinja2 import ChoiceLoader, Environment, FileSystemLoader
 from loguru import logger
-from taskiq import TaskiqScheduler
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import (
     ListRedisScheduleSource,
@@ -15,6 +14,7 @@ from taskiq_redis import (
 )
 
 from terebii import utils
+from terebii.scheduler import Scheduler
 from terebii.settings import settings
 
 backend = RedisAsyncResultBackend(
@@ -29,8 +29,9 @@ redis_source = ListRedisScheduleSource(
     settings().redis_url.get_secret_value().encoded_string()
 )
 
-scheduler = TaskiqScheduler(
-    broker=broker, sources=[redis_source, LabelScheduleSource(broker)]
+scheduler = Scheduler(
+    broker=broker,
+    sources=[redis_source, LabelScheduleSource(broker)],
 )
 
 template_loader = ChoiceLoader(
