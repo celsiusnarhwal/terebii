@@ -158,9 +158,9 @@ async def send_notification(episode_id: int):
 @broker.task(schedule=[{"interval": settings().refresh_interval}])
 async def get_episodes():
     start = pendulum.now("UTC")
-    end = start + pendulum.Duration(weeks=1)
+    end = start + pendulum.Duration(hours=24)
 
-    logger.debug(f"Airing window: {start} to {end}")
+    logger.debug(f"Looking for episodes airing from {start} to {end}")
 
     async with utils.sonarr() as sonarr:
         logger.info(f"Retrieving calendar from {settings().sonarr_url}...")
