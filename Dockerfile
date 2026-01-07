@@ -24,4 +24,6 @@ RUN uv sync
 COPY . /app/
 RUN rm -rf s6/
 
+CMD ["with-contenv", "uv", "run", "taskiq", "worker", "terebii.app:broker"]
+
 ENTRYPOINT ["/init"]
