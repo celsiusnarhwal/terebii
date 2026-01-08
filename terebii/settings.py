@@ -1,6 +1,5 @@
 import sys
 import typing as t
-from datetime import datetime
 from functools import cache
 
 import durationpy
@@ -31,16 +30,12 @@ class TerebiiSettings(BaseSettings):
     sonarr_url: HttpUrl
     sonarr_api_key: SecretStr
     notification_url: AnyUrl
-    timezone: TimeZoneName = Field(None, alias="TZ")
+    timezone: TimeZoneName = Field("UTC", alias="TZ")
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
     include_posters: bool = False
     redis_url: Secret[RedisDsn] = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error"] = "info"
-
-    @field_validator("timezone", mode="before")
-    def validate_timezone(cls, v):
-        return v or datetime.now().astimezone().tzname()
 
     @field_validator("log_level")
     @classmethod
