@@ -193,7 +193,7 @@ async def get_episodes():
         if air_date := episode.get("airDateUtc"):
             logger.debug(
                 f"Adding notification for {episode['series']['title']} S{episode['seasonNumber']} "
-                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} UTC ({episode['id']})"
+                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ({episode['id']})"
             )
 
             await (
