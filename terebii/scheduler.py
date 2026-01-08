@@ -15,8 +15,13 @@ templates = Environment(
 
 class Scheduler(TaskiqScheduler):
     async def startup(self) -> None:
+        version = importlib.metadata.version("terebii")
+
+        if version == "0.0.0":
+            version = "edge"
+
         variables = {
-            "version": importlib.metadata.version("terebii"),
+            "version": version,
             "year": pendulum.now(settings().timezone).year,
         }
 
