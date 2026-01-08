@@ -17,7 +17,7 @@ class Scheduler(TaskiqScheduler):
     async def startup(self) -> None:
         variables = {
             "version": importlib.metadata.version("terebii"),
-            "year": pendulum.now().in_tz(settings().timezone).year,
+            "year": pendulum.now(settings().timezone),
         }
 
         rich.print(
