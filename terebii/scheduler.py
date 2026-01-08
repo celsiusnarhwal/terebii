@@ -18,7 +18,7 @@ class Scheduler(TaskiqScheduler):
         version = importlib.metadata.version("terebii")
 
         if version == "0.0.0":
-            version = "edge"
+            version = "Edge"
 
         variables = {
             "version": version,
