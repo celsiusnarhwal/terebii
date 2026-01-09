@@ -1,4 +1,3 @@
-from datetime import datetime
 from pathlib import Path
 
 import inflect as ifl
@@ -131,8 +130,8 @@ async def send_notification(episode_id: int):
         "tvdb_url": tvdb_url,
         "tmdb_url": tmdb_url,
         "imdb_url": imdb_url,
-        "air_date": datetime.fromisoformat(air_date.to_iso8601_string()),
-        "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
+        "air_date": air_date,
+        "air_date_utc": air_date_utc,
     }
 
     logger.debug(
