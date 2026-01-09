@@ -87,6 +87,21 @@ async def send_notification(episode_id: int):
     air_date_utc = pendulum.parse(episode["airDateUtc"])
     air_date = air_date_utc.in_tz(settings().timezone)
 
+    if tvdb_id := episode["tvdbId"]:
+        tvdb_url = f"https://thetvdb.com/?tab=series&id={tvdb_id}"
+    else:
+        tvdb_url = None
+
+    if tmdb_id := episode["tmdbId"]:
+        tmdb_url = f"https://thetvdb.com/tv/{tmdb_id}"
+    else:
+        tmdb_url = None
+
+    if imdb_id := episode["imdbId"]:
+        imdb_url = f"https://imdb.com/title/{imdb_id}"
+    else:
+        imdb_url = None
+
     episode_log_str = (
         f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
     )
@@ -98,7 +113,6 @@ async def send_notification(episode_id: int):
         )
 
         return
-
     variables = {
         "title": title,
         "show_name": show_name,
@@ -114,6 +128,9 @@ async def send_notification(episode_id: int):
         "season_ordinal": season_ordinal,
         "season_num_word": season_num_word,
         "season_ordinal_word": season_ordinal_word,
+        "tvdb_url": tvdb_url,
+        "tmdb_url": tmdb_url,
+        "imdb_url": imdb_url,
         "air_date": datetime.fromisoformat(air_date.to_iso8601_string()),
         "air_date_utc": datetime.fromisoformat(air_date_utc.to_iso8601_string()),
     }
