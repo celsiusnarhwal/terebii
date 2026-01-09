@@ -106,6 +106,8 @@ will result in a notification body similar to this:
 
 The above examples are also the default values for each template if either one is not present.
 
+### Template variables
+
 The following variables are provided to notification templates:
 
 | **Variable**           | **Type**                                                                                       | **Description**                                                                                                                              |
@@ -140,6 +142,8 @@ The `air_date` and `air_date_utc` variables can be formatted using [`strftime()`
 ```
 {{ air_date.strftime("%Y-%m-%d %H:%M:%S") }}
 ```
+
+Unformatted dates will be presented according to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601).
 
 For all format codes, see [strfti.me](https://strfti.me).
 
