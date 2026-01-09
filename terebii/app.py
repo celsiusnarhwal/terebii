@@ -189,8 +189,8 @@ async def get_episodes():
         resp = await sonarr.get(
             "/calendar",
             params={
-                "start": start.to_iso8601_string(),
-                "end": end.to_iso8601_string(),
+                "start": start.to_rfc3339_string(),
+                "end": end.to_rfc3339_string(),
                 "unmonitored": settings().include_unmonitored,
                 "includeSeries": True,
             },
