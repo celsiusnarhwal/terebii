@@ -30,7 +30,7 @@ class TerebiiSettings(BaseSettings):
     sonarr_url: HttpUrl
     sonarr_api_key: SecretStr
     notification_url: AnyUrl
-    timezone: TimeZoneName = Field("UTC", alias="TZ")
+    timezone: TimeZoneName = Field("UTC")
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
     include_posters: bool = False
