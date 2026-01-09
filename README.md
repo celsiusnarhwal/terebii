@@ -130,7 +130,7 @@ The following variables are provided to notification templates:
 | `air_date`             | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in the time zone specified by the `TEREBII_TIMEZONE` environment variable (see [Configuration](#configuration)). |
 | `air_date_utc`         | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in UTC.                                                                                                          |                                                                                               |                                                                                                      |
 
-All template variables are [Python](https://python.org) objects and can be manipulated within notification templates
+All template variables are Python objects and can be manipulated within notification templates
 in all of the ways that Jinja supports.
 
 ### Formatting dates
