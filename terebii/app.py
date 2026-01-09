@@ -17,11 +17,11 @@ from terebii.scheduler import Scheduler
 from terebii.settings import settings
 
 backend = RedisAsyncResultBackend(
-    redis_url=settings().redis_url.get_secret_value().encoded_string()
+    settings().redis_url.get_secret_value().encoded_string()
 )
 
 broker = RedisStreamBroker(
-    url=settings().redis_url.get_secret_value().encoded_string()
+    settings().redis_url.get_secret_value().encoded_string()
 ).with_result_backend(backend)
 
 redis_source = ListRedisScheduleSource(
