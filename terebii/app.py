@@ -86,17 +86,17 @@ async def send_notification(episode_id: int):
     air_date_utc = pendulum.parse(episode["airDateUtc"])
     air_date = air_date_utc.in_tz(settings().timezone)
 
-    if tvdb_id := episode["tvdbId"]:
+    if tvdb_id := episode["series"]["tvdbId"]:
         tvdb_url = f"https://thetvdb.com/?tab=series&id={tvdb_id}"
     else:
         tvdb_url = None
 
-    if tmdb_id := episode["tmdbId"]:
+    if tmdb_id := episode["series"]["tmdbId"]:
         tmdb_url = f"https://thetvdb.com/tv/{tmdb_id}"
     else:
         tmdb_url = None
 
-    if imdb_id := episode["imdbId"]:
+    if imdb_id := episode["series"]["imdbId"]:
         imdb_url = f"https://imdb.com/title/{imdb_id}"
     else:
         imdb_url = None
