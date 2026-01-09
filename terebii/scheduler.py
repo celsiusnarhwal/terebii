@@ -6,6 +6,7 @@ import rich
 from jinja2 import Environment, FileSystemLoader
 from taskiq import TaskiqScheduler
 
+from terebii import utils
 from terebii.settings import settings
 
 templates = Environment(
@@ -26,5 +27,7 @@ class Scheduler(TaskiqScheduler):
         }
 
         rich.print(
-            "\n" + templates.get_template("startup.jinja").render(variables) + "\n"
+            "\n"
+            + await utils.render_default_template("startup.jinja", variables)
+            + "\n"
         )

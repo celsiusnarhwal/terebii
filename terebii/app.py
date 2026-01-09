@@ -1,9 +1,6 @@
-from pathlib import Path
-
 import inflect as ifl
 import pendulum
 from apprise import Apprise
-from jinja2 import ChoiceLoader, Environment, FileSystemLoader
 from loguru import logger
 from taskiq.schedule_sources import LabelScheduleSource
 from taskiq_redis import (
@@ -32,15 +29,6 @@ scheduler = Scheduler(
     broker=broker,
     sources=[redis_source, LabelScheduleSource(broker)],
 )
-
-template_loader = ChoiceLoader(
-    [
-        FileSystemLoader(Path(__file__).parent / "templates"),
-        FileSystemLoader(Path(__file__).parent / "default_templates"),
-    ]
-)
-
-templates = Environment(loader=template_loader)
 
 inflect = ifl.engine()
 
@@ -106,12 +94,10 @@ async def send_notification(episode_id: int):
     )
 
     if not (episode["monitored"] or settings().include_unmonitored):
-        logger.debug(
-            f"A notification was scheduled for {episode_log_str} but it is not monitored and "
-            f"TEREBII_INCLUDE_UNMONITORED is False, so it is being skipped"
-        )
+        logger.info(f"{episode_log_str} is unmonitored; skipping notification")
 
         return
+
     variables = {
         "title": title,
         "show_name": show_name,
@@ -138,8 +124,8 @@ async def send_notification(episode_id: int):
         f"Rendering notification templates for {episode_log_str} with variables: {variables}"
     )
 
-    notification_title = templates.get_template("title.jinja").render(variables)
-    notification_body = templates.get_template("body.jinja").render(variables)
+    notification_title = await utils.render_template("title.jinja", variables)
+    notification_body = await utils.render_template("body.jinja", variables)
 
     attach = None
 
@@ -181,10 +167,10 @@ async def get_episodes():
     start = pendulum.now("UTC")
     end = start.add(hours=24)
 
-    logger.debug(f"Looking for episodes airing from {start} to {end}")
+    logger.debug(f"Looking for episodes airing within 24 hours ({start} to {end})")
 
     async with utils.sonarr() as sonarr:
-        logger.info(f"Retrieving calendar from {settings().sonarr_url}...")
+        logger.debug(f"Retrieving calendar from {settings().sonarr_url}...")
 
         resp = await sonarr.get(
             "/calendar",
@@ -201,14 +187,15 @@ async def get_episodes():
 
         episodes = resp.json()
 
-        logger.info("Calendar retrieved!")
-
-    await redis_source.startup()
+        logger.debug(f"Calendar retrieved from {settings().sonarr_url}")
+        logger.info(
+            f"Scheduling notifications for {len(episodes)} episodes airing within 24 hours ({start} to {end})"
+        )
 
     for episode in episodes:
         if air_date := episode.get("airDateUtc"):
             logger.debug(
-                f"Adding notification for {episode['series']['title']} S{episode['seasonNumber']} "
+                f"Scheduling notification for {episode['series']['title']} S{episode['seasonNumber']} "
                 f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ({episode['id']})"
             )
 
