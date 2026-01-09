@@ -92,7 +92,7 @@ async def send_notification(episode_id: int):
         tvdb_url = None
 
     if tmdb_id := episode["series"]["tmdbId"]:
-        tmdb_url = f"https://thetvdb.com/tv/{tmdb_id}"
+        tmdb_url = f"https://themoviedb.com/tv/{tmdb_id}"
     else:
         tmdb_url = None
 
