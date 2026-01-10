@@ -14,7 +14,7 @@ RUN tar -C / -Jxpf /tmp/s6-overlay-${S6_ARCH}.tar.xz
 COPY s6/etc/ /etc/
 
 ARG NO_REDIS
-RUN if [ "${NO_REDIS}" != 1 ]; then apt-get update && apt-get install redis-server -y; else rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/redis; fi
+RUN if [ "${NO_REDIS}" != 1 ]; then apt-get update && apt-get install redis-server -y; else find /etc/s6-overlay -name "redis" -exec rm -rf {} +; fi
 
 WORKDIR /app/
 
