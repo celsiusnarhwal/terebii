@@ -71,74 +71,18 @@ async def send_notification(episode_id: int, air_date_utc: str):
 
         logger.debug(f"Retrieved {episode_log_str}")
 
-    title = episode["title"]
-    show_name = episode["series"]["title"]
-    runtime = episode["runtime"]
-    network = episode["series"]["network"]
-
-    episode_num = episode["episodeNumber"]
-    episode_num_00 = str(episode_num).zfill(2)
-    episode_num_word = inflect.number_to_words(episode_num)
-    episode_ordinal = inflect.ordinal(episode_num)
-    episode_ordinal_word = inflect.number_to_words(episode_ordinal)
-    season_num = episode["seasonNumber"]
-    season_num_00 = str(season_num).zfill(2)
-    season_num_word = inflect.number_to_words(season_num)
-    season_ordinal = inflect.ordinal(season_num)
-    season_ordinal_word = inflect.number_to_words(season_ordinal)
-
-    tvdb_url = (
-        f"https://thetvdb.com/?tab=series&id={tvdb_id}"
-        if (tvdb_id := episode["series"]["tvdbId"])
-        else None
-    )
-    tmdb_url = (
-        f"https://themoviedb.org/tv/{tmdb_id}"
-        if (tmdb_id := episode["series"]["tmdbId"])
-        else None
-    )
-    imdb_url = (
-        f"https://imdb.com/title/{imdb_id}"
-        if (imdb_id := episode["series"]["imdbId"])
-        else None
-    )
-
-    air_date = air_date_utc.in_tz(settings().timezone)
-    air_date_timestamp = air_date_utc.int_timestamp
-
     if not (episode["monitored"] or settings().include_unmonitored):
         logger.info(f"{episode_log_str} is unmonitored; skipping notification")
         return
 
-    variables = {
-        "title": title,
-        "show_name": show_name,
-        "runtime": runtime,
-        "network": network,
-        "episode_num": episode_num,
-        "episode_num_00": episode_num_00,
-        "episode_ordinal": episode_ordinal,
-        "episode_num_word": episode_num_word,
-        "episode_ordinal_word": episode_ordinal_word,
-        "season_num": season_num,
-        "season_num_00": season_num_00,
-        "season_ordinal": season_ordinal,
-        "season_num_word": season_num_word,
-        "season_ordinal_word": season_ordinal_word,
-        "tvdb_url": tvdb_url,
-        "tmdb_url": tmdb_url,
-        "imdb_url": imdb_url,
-        "air_date": air_date,
-        "air_date_utc": air_date_utc,
-        "air_date_timestamp": air_date_timestamp,
-    }
+    template_variables = utils.get_episode_template_variables(episode)
 
     logger.debug(
-        f"Rendering notification templates for {episode_log_str} with variables: {variables}"
+        f"Rendering notification templates for {episode_log_str} with variables: {template_variables}"
     )
 
-    notification_title = await utils.render_template("title.jinja", variables)
-    notification_body = await utils.render_template("body.jinja", variables)
+    notification_title = await utils.render_template("title.jinja", template_variables)
+    notification_body = await utils.render_template("body.jinja", template_variables)
 
     attach = None
 
@@ -181,7 +125,9 @@ async def get_episodes():
     start = pendulum.now("UTC")
     end = start.add(hours=24)
 
-    logger.debug(f"Looking for episodes airing within 24 hours ({start} to {end})")
+    logger.debug(
+        f"Looking for episodes airing within 24 hours ({start.to_rfc3339_string()} to {end.to_rfc3339_string()})"
+    )
 
     async with utils.sonarr() as sonarr:
         logger.debug(f"Retrieving calendar from {settings().sonarr_url}...")
@@ -217,7 +163,7 @@ async def get_episodes():
                 .with_schedule_id(str(episode["id"]))
                 .schedule_by_time(
                     source=redis_source,
-                    time=air_date_utc,
+                    time=pendulum.parse(air_date_utc),
                     episode_id=episode["id"],
                     air_date_utc=air_date_utc,
                 )

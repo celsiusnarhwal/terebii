@@ -1,7 +1,9 @@
 from pathlib import Path
 
 import httpx
+import inflect as ifl
 import jinja2
+import pendulum
 from jinja2 import ChoiceLoader, Environment, FileSystemLoader
 from loguru import logger
 
@@ -19,6 +21,8 @@ templates = Environment(
 
 
 default_templates = Environment(loader=fs_loaders[1], enable_async=True)
+
+inflect = ifl.engine()
 
 
 def sonarr() -> httpx.AsyncClient:
@@ -61,6 +65,67 @@ def get_episode_log_str(episode: dict) -> str:
         f"{episode['series']['title']} S{episode['seasonNumber']} E{episode['episodeNumber']} — {episode['title']} "
         f"({episode['id']})"
     )
+
+
+def get_episode_template_variables(episode: dict) -> dict:
+    title = episode["title"]
+    show_name = episode["series"]["title"]
+    runtime = episode["runtime"]
+    network = episode["series"]["network"]
+
+    episode_num = episode["episodeNumber"]
+    episode_num_00 = str(episode_num).zfill(2)
+    episode_num_word = inflect.number_to_words(episode_num)
+    episode_ordinal = inflect.ordinal(episode_num)
+    episode_ordinal_word = inflect.number_to_words(episode_ordinal)
+    season_num = episode["seasonNumber"]
+    season_num_00 = str(season_num).zfill(2)
+    season_num_word = inflect.number_to_words(season_num)
+    season_ordinal = inflect.ordinal(season_num)
+    season_ordinal_word = inflect.number_to_words(season_ordinal)
+
+    tvdb_url = (
+        f"https://thetvdb.com/?tab=series&id={tvdb_id}"
+        if (tvdb_id := episode["series"]["tvdbId"])
+        else None
+    )
+    tmdb_url = (
+        f"https://themoviedb.org/tv/{tmdb_id}"
+        if (tmdb_id := episode["series"]["tmdbId"])
+        else None
+    )
+    imdb_url = (
+        f"https://imdb.com/title/{imdb_id}"
+        if (imdb_id := episode["series"]["imdbId"])
+        else None
+    )
+
+    air_date_utc = pendulum.parse(episode["airDateUtc"])
+    air_date = air_date_utc.in_tz(settings().timezone)
+    air_date_timestamp = air_date_utc.int_timestamp
+
+    return {
+        "title": title,
+        "show_name": show_name,
+        "runtime": runtime,
+        "network": network,
+        "episode_num": episode_num,
+        "episode_num_00": episode_num_00,
+        "episode_ordinal": episode_ordinal,
+        "episode_num_word": episode_num_word,
+        "episode_ordinal_word": episode_ordinal_word,
+        "season_num": season_num,
+        "season_num_00": season_num_00,
+        "season_ordinal": season_ordinal,
+        "season_num_word": season_num_word,
+        "season_ordinal_word": season_ordinal_word,
+        "tvdb_url": tvdb_url,
+        "tmdb_url": tmdb_url,
+        "imdb_url": imdb_url,
+        "air_date": air_date,
+        "air_date_utc": air_date_utc,
+        "air_date_timestamp": air_date_timestamp,
+    }
 
 
 async def render_default_template(template: str, context: dict) -> str:
