@@ -36,7 +36,13 @@ inflect = ifl.engine()
 
 @broker.task
 @logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
-async def send_notification(episode_id: int):
+async def send_notification(episode_id: int, air_date_utc: pendulum.DateTime):
+    if (pendulum.now() - air_date_utc).minutes > 2:
+        logger.debug(
+            f"Notification task for episode with ID {episode_id} is too old; skipping"
+        )
+        return
+
     logger.debug(f"Preparing to send notification for episode with ID {episode_id}")
 
     async with utils.sonarr() as sonarr:
@@ -72,7 +78,6 @@ async def send_notification(episode_id: int):
     season_ordinal = inflect.ordinal(season_num)
     season_ordinal_word = inflect.number_to_words(season_ordinal)
 
-    air_date_utc = pendulum.parse(episode["airDateUtc"])
     air_date = air_date_utc.in_tz(settings().timezone)
 
     if tvdb_id := episode["series"]["tvdbId"]:
@@ -194,10 +199,10 @@ async def get_episodes():
         )
 
     for episode in episodes:
-        if air_date := episode.get("airDateUtc"):
+        if air_date_utc := episode.get("airDateUtc"):
             logger.debug(
                 f"Scheduling notification for {episode['series']['title']} S{episode['seasonNumber']} "
-                f"E{episode['episodeNumber']} — {episode['title']} at {air_date} ({episode['id']})"
+                f"E{episode['episodeNumber']} — {episode['title']} at {air_date_utc} ({episode['id']})"
             )
 
             await (
@@ -205,7 +210,8 @@ async def get_episodes():
                 .with_schedule_id(str(episode["id"]))
                 .schedule_by_time(
                     source=redis_source,
-                    time=air_date,
+                    time=air_date_utc,
                     episode_id=episode["id"],
+                    air_date_utc=pendulum.parse(air_date_utc),
                 )
             )
