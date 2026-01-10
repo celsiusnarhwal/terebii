@@ -36,18 +36,18 @@ inflect = ifl.engine()
 
 @broker.task
 @logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
-async def send_notification(episode_id: int, air_date_utc: str):
-    air_date_utc = pendulum.parse(air_date_utc)
-    task_age = pendulum.now().diff(air_date_utc)
+async def send_notification(episode_id: int, exec_time: float):
+    exec_time = pendulum.parse(exec_time)
+    task_age = pendulum.now().diff(exec_time)
 
     logger.debug(
         f"Notification task for episode with ID {episode_id} is {task_age.seconds} seconds old "
-        f"(scheduled for {air_date_utc.to_iso8601_string()})"
+        f"(scheduled for {exec_time.to_iso8601_string()})"
     )
 
     if task_age.minutes > 2:
         logger.debug(
-            f"Notification task for episode with ID {episode_id} is too old; skipping"
+            f"Notification task for episode with ID {episode_id} is too old (≥2 minutes); skipping"
         )
         return
 
@@ -155,8 +155,11 @@ async def get_episodes():
 
     for episode in episodes:
         if air_date_utc := episode.get("airDateUtc"):
+            air_date_utc = pendulum.parse(air_date_utc)
+
             logger.debug(
-                f"Scheduling notification for {utils.get_episode_log_str(episode)} at {air_date_utc}"
+                f"Scheduling notification for {utils.get_episode_log_str(episode)} "
+                f"at {air_date_utc.to_iso8601_string()}"
             )
 
             await (
@@ -164,8 +167,8 @@ async def get_episodes():
                 .with_schedule_id(str(episode["id"]))
                 .schedule_by_time(
                     source=redis_source,
-                    time=pendulum.parse(air_date_utc),
+                    time=air_date_utc,
                     episode_id=episode["id"],
-                    air_date_utc=air_date_utc,
+                    exec_time=air_date_utc.float_timestamp,
                 )
             )
