@@ -37,7 +37,7 @@ inflect = ifl.engine()
 @broker.task
 @logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
 async def send_notification(episode_id: int, exec_time: float):
-    exec_time = pendulum.parse(exec_time)
+    exec_time = pendulum.from_timestamp(exec_time)
     task_age = pendulum.now().diff(exec_time)
 
     logger.debug(
