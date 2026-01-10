@@ -67,8 +67,9 @@ async def send_notification(episode_id: int, air_date_utc: str):
         resp.raise_for_status()
 
         episode = resp.json()
+        episode_log_str = utils.get_episode_log_str(episode)
 
-        logger.debug(f"Retrieved episode with ID {episode_id}")
+        logger.debug(f"Retrieved {episode_log_str}")
 
     title = episode["title"]
     show_name = episode["series"]["title"]
@@ -104,10 +105,6 @@ async def send_notification(episode_id: int, air_date_utc: str):
 
     air_date = air_date_utc.in_tz(settings().timezone)
     air_date_timestamp = air_date_utc.int_timestamp
-
-    episode_log_str = (
-        f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
-    )
 
     if not (episode["monitored"] or settings().include_unmonitored):
         logger.info(f"{episode_log_str} is unmonitored; skipping notification")
@@ -212,8 +209,7 @@ async def get_episodes():
     for episode in episodes:
         if air_date_utc := episode.get("airDateUtc"):
             logger.debug(
-                f"Scheduling notification for {episode['series']['title']} S{episode['seasonNumber']} "
-                f"E{episode['episodeNumber']} — {episode['title']} at {air_date_utc} ({episode['id']})"
+                f"Scheduling notification for {utils.get_episode_log_str(episode)} at {air_date_utc}"
             )
 
             await (

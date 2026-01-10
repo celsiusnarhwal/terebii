@@ -56,6 +56,13 @@ def handle_sonarr_request_error(exception: httpx.HTTPError):
             )
 
 
+def get_episode_log_str(episode: dict) -> str:
+    return (
+        f"{episode['series']['title']} S{episode['seasonNumber']} E{episode['episodeNumber']} — {episode['title']} "
+        f"({episode['id']})"
+    )
+
+
 async def render_default_template(template: str, context: dict) -> str:
     return await default_templates.get_template(template).render_async(context)
 
@@ -70,4 +77,3 @@ async def render_template(template_name: str, context: dict) -> str:
         )
 
         return await render_default_template(template_name, context)
-        
