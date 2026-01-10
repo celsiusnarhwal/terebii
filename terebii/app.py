@@ -109,7 +109,6 @@ async def send_notification(episode_id: int, air_date_utc: str):
 
     if not (episode["monitored"] or settings().include_unmonitored):
         logger.info(f"{episode_log_str} is unmonitored; skipping notification")
-
         return
 
     variables = {
