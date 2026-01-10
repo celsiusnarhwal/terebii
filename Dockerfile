@@ -1,5 +1,7 @@
 FROM ghcr.io/astral-sh/uv:0.9-debian
 
+ENV S6_KEEP_ENV=1
+
 ARG S6_OVERLAY_VERSION=3.2.1.0
 
 ARG TARGETARCH
