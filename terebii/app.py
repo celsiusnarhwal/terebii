@@ -1,3 +1,4 @@
+import httpx
 import inflect as ifl
 import pendulum
 from apprise import Apprise
@@ -34,6 +35,7 @@ inflect = ifl.engine()
 
 
 @broker.task
+@logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
 async def send_notification(episode_id: int):
     logger.debug(f"Preparing to send notification for episode with ID {episode_id}")
 
@@ -48,8 +50,7 @@ async def send_notification(episode_id: int):
             )
             return
 
-        with logger.catch():
-            resp.raise_for_status()
+        resp.raise_for_status()
 
         episode = resp.json()
 
@@ -163,6 +164,7 @@ async def send_notification(episode_id: int):
 
 
 @broker.task(schedule=[{"interval": settings().refresh_interval}])
+@logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
 async def get_episodes():
     start = pendulum.now("UTC")
     end = start.add(hours=24)
@@ -182,8 +184,7 @@ async def get_episodes():
             },
         )
 
-        with logger.catch():
-            resp.raise_for_status()
+        resp.raise_for_status()
 
         episodes = resp.json()
 

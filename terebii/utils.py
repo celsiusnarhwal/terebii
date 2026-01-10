@@ -28,6 +28,34 @@ def sonarr() -> httpx.AsyncClient:
     )
 
 
+def handle_sonarr_request_error(exception: httpx.HTTPError):
+    match exception:
+        case (
+            httpx.ConnectError()
+            | httpx.HTTPStatusError(response=httpx.Response(status_code=404))
+        ):
+            logger.critical(
+                f"{settings().sonarr_url} couldn't be reached. Check TEREBII_SONARR_URL."
+            )
+
+        case httpx.HTTPStatusError():
+            if exception.response.status_code == 401:
+                logger.critical(
+                    f"Invalid API key for {settings().sonarr_url}. Check TEREBII_SONARR_API_KEY."
+                )
+            else:
+                logger.critical(
+                    f"{settings().sonarr_url} responded with an HTTP {exception.response.status_code} "
+                    f"status code."
+                )
+
+        case _:
+            logger.critical(
+                "There was a problem connecting to Sonarr. Check TEREBII_SONARR_URL and TEREBII_SONARR_API_KEY,"
+                "and make sure your Sonarr instance is running and reachable from Terebii's container."
+            )
+
+
 async def render_default_template(template: str, context: dict) -> str:
     return await default_templates.get_template(template).render_async(context)
 
@@ -42,3 +70,6 @@ async def render_template(template_name: str, context: dict) -> str:
         )
 
         return await render_default_template(template_name, context)
+
+
+logger.catch()
