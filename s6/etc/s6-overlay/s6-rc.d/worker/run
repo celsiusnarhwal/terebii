@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-uv run --directory /app/ taskiq worker terebii.app:broker --workers 1
+uv run --directory /app/ taskiq worker terebii.app:broker --workers 1 --no-configure-logging
