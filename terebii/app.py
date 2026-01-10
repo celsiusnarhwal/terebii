@@ -103,6 +103,7 @@ async def send_notification(episode_id: int, air_date_utc: str):
     )
 
     air_date = air_date_utc.in_tz(settings().timezone)
+    air_date_timestamp = air_date_utc.int_timestamp
 
     episode_log_str = (
         f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
@@ -132,6 +133,7 @@ async def send_notification(episode_id: int, air_date_utc: str):
         "imdb_url": imdb_url,
         "air_date": air_date,
         "air_date_utc": air_date_utc,
+        "air_date_timestamp": air_date_timestamp,
     }
 
     logger.debug(

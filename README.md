@@ -129,6 +129,7 @@ The following variables are provided to notification templates:
 | `imdb_url`             | String ([`str`](https://docs.python.org/3/library/stdtypes.html#str))                          | The URL of the show on [IMDb](https://imdb.com), or `None` if no URL is available.                                                           |
 | `air_date`             | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in the time zone specified by the `TEREBII_TIMEZONE` environment variable (see [Configuration](#configuration)). |
 | `air_date_utc`         | Date ([`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime-objects)) | The air date of the episode in UTC.                                                                                                          |                                                                                               |                                                                                                      |
+| `air_date_timestamp`   | Integer ([`int`](https://docs.python.org/3/library/functions.html#int))                        | The air date of the episode in [Unix time](https://en.wikipedia.org/wiki/Unix_time).                                                         |
 
 All template variables are Python objects and can be manipulated within notification templates
 in all of the ways that Jinja supports.
