@@ -67,6 +67,15 @@ def get_episode_log_str(episode: dict) -> str:
     )
 
 
+def get_date_with_tz_log_str(date: pendulum.DateTime) -> str:
+    log_str = date.to_rfc3339_string()
+
+    if not pendulum.now(settings().timezone).is_utc():
+        log_str += f" ({settings().timezone}: {date.in_timezone(settings().timezone).to_rfc3339_string()})"
+
+    return log_str
+
+
 def get_episode_template_variables(episode: dict) -> dict:
     title = episode["title"]
     show_name = episode["series"]["title"]
@@ -101,7 +110,7 @@ def get_episode_template_variables(episode: dict) -> dict:
     )
 
     air_date_utc = pendulum.parse(episode["airDateUtc"])
-    air_date = air_date_utc.in_tz(settings().timezone)
+    air_date = air_date_utc.in_timezone(settings().timezone)
     air_date_timestamp = air_date_utc.int_timestamp
 
     return {
