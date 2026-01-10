@@ -94,7 +94,7 @@ async def send_notification(episode_id: int, air_date_utc: str):
         tvdb_url = None
 
     if tmdb_id := episode["series"]["tmdbId"]:
-        tmdb_url = f"https://themoviedb.com/tv/{tmdb_id}"
+        tmdb_url = f"https://themoviedb.org/tv/{tmdb_id}"
     else:
         tmdb_url = None
 
@@ -221,6 +221,6 @@ async def get_episodes():
                     source=redis_source,
                     time=air_date_utc,
                     episode_id=episode["id"],
-                    air_date_utc=pendulum.parse(air_date_utc),
+                    air_date_utc=air_date_utc,
                 )
             )
