@@ -42,7 +42,7 @@ async def send_notification(episode_id: int, air_date_utc: str):
 
     logger.debug(
         f"Notification task for episode with ID {episode_id} is {task_age.seconds} seconds old "
-        f"(scheduled for {air_date_utc.to_rfc3339_string()})"
+        f"(scheduled for {air_date_utc.to_iso8601_string()})"
     )
 
     if task_age.minutes > 2:
@@ -126,7 +126,7 @@ async def get_episodes():
     end = start.add(hours=24)
 
     logger.debug(
-        f"Looking for episodes airing within 24 hours ({start.to_rfc3339_string()} to {end.to_rfc3339_string()})"
+        f"Looking for episodes airing within 24 hours ({start.to_iso8601_string()} to {end.to_iso8601_string()})"
     )
 
     async with utils.sonarr() as sonarr:
@@ -150,7 +150,7 @@ async def get_episodes():
 
         logger.info(
             f"Scheduling notifications for {len(episodes)} episodes airing within 24 hours "
-            f"({start.to_rfc3339_string()} to {end.to_rfc3339_string()})"
+            f"({start.to_iso8601_string()} to {end.to_iso8601_string()})"
         )
 
     for episode in episodes:
