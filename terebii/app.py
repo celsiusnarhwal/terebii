@@ -221,6 +221,6 @@ async def get_episodes():
                     source=redis_source,
                     time=air_date_utc,
                     episode_id=episode["id"],
-                    air_date_utc=pendulum.parse(air_date_utc),
+                    air_date_utc=air_date_utc,
                 )
             )
