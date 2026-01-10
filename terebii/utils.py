@@ -70,6 +70,4 @@ async def render_template(template_name: str, context: dict) -> str:
         )
 
         return await render_default_template(template_name, context)
-
-
-logger.catch()
+        
