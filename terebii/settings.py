@@ -35,7 +35,7 @@ class TerebiiSettings(BaseSettings):
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
     redis_url: Secret[RedisDsn] = "redis://localhost"
-    log_level: t.Literal["debug", "info", "warning", "error"] = "info"
+    log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
 
     @field_validator("log_level")
     @classmethod
