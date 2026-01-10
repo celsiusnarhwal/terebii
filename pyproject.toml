@@ -17,6 +17,7 @@ dependencies = [
     "rich>=14.2.0",
     "taskiq>=0.12.1",
     "taskiq-redis>=1.1.2",
+    "uvloop>=0.22.1",
 ]
 dynamic = ["version"]
 

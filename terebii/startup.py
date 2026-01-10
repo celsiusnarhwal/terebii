@@ -1,10 +1,10 @@
 #!/usr/bin/env -S uv run --directory /app/
 
-import asyncio
 import importlib.metadata
 
 import pendulum
 import rich
+import uvloop
 
 from terebii import utils
 from terebii.settings import settings
@@ -27,4 +27,4 @@ async def startup():
 
 
 if __name__ == "__main__":
-    asyncio.run(startup())
+    uvloop.run(startup())
