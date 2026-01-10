@@ -194,6 +194,7 @@ async def get_episodes():
         episodes = resp.json()
 
         logger.debug(f"Calendar retrieved from {settings().sonarr_url}")
+
         logger.info(
             f"Scheduling notifications for {len(episodes)} episodes airing within 24 hours ({start} to {end})"
         )
