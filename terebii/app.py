@@ -36,8 +36,10 @@ inflect = ifl.engine()
 
 @broker.task
 @logger.catch(httpx.HTTPError, onerror=utils.handle_sonarr_request_error)
-async def send_notification(episode_id: int, air_date_utc: pendulum.DateTime):
-    if (pendulum.now() - air_date_utc).minutes > 2:
+async def send_notification(episode_id: int, air_date_utc: str):
+    air_date_utc = pendulum.parse(air_date_utc)
+
+    if (pendulum.now() - air_date_utc).seconds > 120:
         logger.debug(
             f"Notification task for episode with ID {episode_id} is too old; skipping"
         )
