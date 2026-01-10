@@ -86,22 +86,23 @@ async def send_notification(episode_id: int, air_date_utc: str):
     season_ordinal = inflect.ordinal(season_num)
     season_ordinal_word = inflect.number_to_words(season_ordinal)
 
+    tvdb_url = (
+        f"https://thetvdb.com/?tab=series&id={tvdb_id}"
+        if (tvdb_id := episode["series"]["tvdbId"])
+        else None
+    )
+    tmdb_url = (
+        f"https://themoviedb.org/tv/{tmdb_id}"
+        if (tmdb_id := episode["series"]["tmdbId"])
+        else None
+    )
+    imdb_url = (
+        f"https://imdb.com/title/{imdb_id}"
+        if (imdb_id := episode["series"]["imdbId"])
+        else None
+    )
+
     air_date = air_date_utc.in_tz(settings().timezone)
-
-    if tvdb_id := episode["series"]["tvdbId"]:
-        tvdb_url = f"https://thetvdb.com/?tab=series&id={tvdb_id}"
-    else:
-        tvdb_url = None
-
-    if tmdb_id := episode["series"]["tmdbId"]:
-        tmdb_url = f"https://themoviedb.org/tv/{tmdb_id}"
-    else:
-        tmdb_url = None
-
-    if imdb_id := episode["series"]["imdbId"]:
-        imdb_url = f"https://imdb.com/title/{imdb_id}"
-    else:
-        imdb_url = None
 
     episode_log_str = (
         f"{show_name} S{season_num} E{episode_num} — {title} ({episode_id})"
