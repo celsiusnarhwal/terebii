@@ -34,12 +34,24 @@ class TerebiiSettings(BaseSettings):
     include_unmonitored: bool = False
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
+    sonarr_username: str = ""
+    sonarr_password: SecretStr = ""
+    sonarr_headers: dict = Field(default_factory=dict)
     redis_url: Secret[RedisDsn] = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
+    use_url_parameter_for_sonarr_api_key: bool = False
+
+    @field_validator("sonarr_headers")
+    def validate_sonarr_headers(cls, v: dict):
+        for key in v:
+            if key.casefold() in ["x-api-key", "authorization"]:
+                v.pop(key, None)
+
+        return v
 
     @field_validator("log_level")
     @classmethod
-    def setup_logging(cls, v):
+    def setup_logging(cls, v: str):
         logger.remove()
         logger.add(
             sink=sys.stderr,

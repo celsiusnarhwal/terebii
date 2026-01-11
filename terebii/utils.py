@@ -26,9 +26,27 @@ inflect = ifl.engine()
 
 
 def sonarr() -> httpx.AsyncClient:
+    headers = settings().sonarr_headers
+    params = {}
+
+    if settings().use_url_parameter_for_sonarr_api_key:
+        params["apikey"] = settings().sonarr_api_key.get_secret_value()
+    else:
+        headers["X-Api-Key"] = settings().sonarr_api_key.get_secret_value()
+
+    auth = (
+        httpx.BasicAuth(
+            settings().sonarr_username, settings().sonarr_password.get_secret_value()
+        )
+        if settings().sonarr_username and settings().sonarr_password
+        else None
+    )
+
     return httpx.AsyncClient(
         base_url=settings().sonarr_url.encoded_string().rstrip("/") + "/api/v3",
-        headers={"X-Api-Key": settings().sonarr_api_key.get_secret_value()},
+        headers=headers,
+        params=params,
+        auth=auth,
     )
 
 
