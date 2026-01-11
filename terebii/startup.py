@@ -38,7 +38,7 @@ async def startup():
         notifier = Apprise()
         notifier.add(str(settings().notification_url.get_secret_value()))
 
-        result = notifier.async_notify(
+        result = await notifier.async_notify(
             title="Hello from Terebii",
             body="This is a test notification from Terebii.\n"
             "https://github.com/celsiusnarhwal/terebii",
