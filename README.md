@@ -180,4 +180,4 @@ Most people won't need to worry about these settings.
 [^3]: If you're using a Redis-less Terebii image, `TEREBII_REDIS_URL` is required.
 
 [^4]: `SONARR_USERNAME` and `SONARR_PASSWORD` are required if Sonarr's API is protected by HTTP Basic authentication. 
-If you don't know whether this is the case, it isn't.
+If you don't know whether this is the case, it probably isn't.
