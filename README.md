@@ -160,7 +160,7 @@ Terebii can be configured via the following environment variables:
 | `TEREBII_INCLUDE_POSTERS`                      | Boolean  | Whether to include show posters as notification attachments when possible.[^2]                                                                                                                                                                                                                                          | No            | `false`                       |
 | `TEREBII_TIMEZONE`                             | String   | An [IANA time zone identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). The `air_date` [template variable](#customizing-notifications) will be provided in this time zone.                                                                                                                   | No            | `UTC`                         |
 
-## Advanced settings
+### Advanced settings
 
 Most people won't need to worry about these settings.
 
