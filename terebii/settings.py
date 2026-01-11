@@ -39,7 +39,7 @@ class TerebiiSettings(BaseSettings):
     sonarr_headers: dict = Field(default_factory=dict)
     redis_url: Secret[RedisDsn] = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
-    use_url_parameter_for_sonarr_api_key: bool = False
+    sonarr_api_key_in_url: bool = False
 
     @field_validator("sonarr_headers")
     def validate_sonarr_headers(cls, v: dict):
