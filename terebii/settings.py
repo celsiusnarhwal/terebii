@@ -34,6 +34,7 @@ class TerebiiSettings(BaseSettings):
     include_unmonitored: bool = False
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
+    test_notification: bool = False
     sonarr_username: str = ""
     sonarr_password: SecretStr = ""
     sonarr_headers: dict = Field(default_factory=dict)
@@ -60,6 +61,10 @@ class TerebiiSettings(BaseSettings):
         )
 
         return v
+
+    @property
+    def tag_list(self) -> list[str]:
+        return self.tags.split(",")
 
 
 @cache
