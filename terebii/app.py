@@ -103,7 +103,7 @@ async def send_notification(episode_id: int, exec_time: float):
             logger.debug(f"No poster found for {episode_log_str}")
 
     notifier = Apprise()
-    notifier.add(settings().notification_url.encoded_string())
+    notifier.add(str(settings().notification_url.get_secret_value()))
 
     logger.info(f"Sending notification for {episode_log_str}")
 

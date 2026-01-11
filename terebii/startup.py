@@ -27,11 +27,16 @@ async def startup():
         "\n" + await utils.render_default_template("startup.jinja", variables) + "\n"
     )
 
+    logger.debug(
+        f"Terebii is running with the following settings (sensitive information redacted): "
+        f"{settings().model_dump_json()}"
+    )
+
     if settings().test_notification:
         logger.debug("Sending test notification")
 
         notifier = Apprise()
-        notifier.add(str(settings().notification_url))
+        notifier.add(str(settings().notification_url.get_secret_value()))
 
         result = notifier.async_notify(
             title="Hello from Terebii",
