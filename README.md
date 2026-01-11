@@ -164,13 +164,13 @@ Terebii can be configured via the following environment variables:
 
 Most people won't need to worry about these settings.
 
-| **Variable**                    | **Type** | **Description**                                                                                                                                                                         | **Required?** | **Default (if not required)** |
-|---------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------------|
-| `TEREBII_REDIS_URL`             | String   | The URL of a [Redis](https://redis.io) server. If specified, Terebii will use this Redis server instead of its integrated one. Must begin with `redis://` or `rediss://`.               | No[^3]        | `redis://localhost`           |
-| `TEREBII_SONARR_USERNAME`       | String   | A username with which to authenticate to Sonarr.                                                                                                                                        | No[^4]        | N/A                           |
-| `TEREBII_SONARR_PASSWORD`       | String   | A password with which to authenticate to Sonarr.                                                                                                                                        | No[^4]        | N/A                           |
-| `TEREBII_SONARR_HEADERS`        | String   | A JSON-formatted string containing HTTP headers for Terebii to include in requests to Sonarr. The `X-Api-Key` and `Authorization` headers, if included in this string, will be ignored. | No            | N/A                           |
-| `TEREBII_SONARR_API_KEY_IN_URL` | Boolean  | If `true`, Terebii will authenticate to Sonarr by including the API key in a URL parameter rather than a header. You should leave this off unless you know you need it on.              | No            | `false`                       |
+| **Variable**                    | **Type** | **Description**                                                                                                                                                           | **Required?** | **Default (if not required)** |
+|---------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------------|
+| `TEREBII_REDIS_URL`             | String   | The URL of a [Redis](https://redis.io) server. If specified, Terebii will use this Redis server instead of its integrated one. Must begin with `redis://` or `rediss://`. | No[^3]        | `redis://localhost`           |
+| `TEREBII_SONARR_USERNAME`       | String   | A username with which to authenticate to Sonarr.                                                                                                                          | No[^4]        | N/A                           |
+| `TEREBII_SONARR_PASSWORD`       | String   | A password with which to authenticate to Sonarr.                                                                                                                          | No[^4]        | N/A                           |
+| `TEREBII_SONARR_HEADERS`        | String   | A JSON-formatted string containing HTTP headers for Terebii to include in requests to Sonarr.                                                                             | No            | N/A                           |
+| `TEREBII_SONARR_API_KEY_IN_URL` | Boolean  | If `true`, Terebii will authenticate to Sonarr by including the API key in a URL parameter rather than a header.                                                          | No            | `false`                       |
 
 
 [^1]: 1 day = 24 hours, 1 week = 7 days, 1 month = 30 days, and 1 year = 365 days.
@@ -179,5 +179,4 @@ Most people won't need to worry about these settings.
 
 [^3]: If you're using a Redis-less Terebii image, `TEREBII_REDIS_URL` is required.
 
-[^4]: `SONARR_USERNAME` and `SONARR_PASSWORD` are required if Sonarr's API is protected by HTTP Basic authentication. 
-If you don't know whether this is the case, it probably isn't.
+[^4]: `TEREBII_SONARR_USERNAME` and `TEREBII_SONARR_PASSWORD` are required if Sonarr's API is protected by HTTP Basic authentication.
