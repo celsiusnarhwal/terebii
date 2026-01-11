@@ -14,17 +14,13 @@ from taskiq_redis import (
 from terebii import utils
 from terebii.settings import settings
 
-backend = RedisAsyncResultBackend(
-    settings().redis_url.get_secret_value().encoded_string()
-)
+backend = RedisAsyncResultBackend(str(settings().redis_url.get_secret_value()))
 
 broker = RedisStreamBroker(
-    settings().redis_url.get_secret_value().encoded_string()
+    str(settings().redis_url.get_secret_value())
 ).with_result_backend(backend)
 
-redis_source = ListRedisScheduleSource(
-    settings().redis_url.get_secret_value().encoded_string()
-)
+redis_source = ListRedisScheduleSource(str(settings().redis_url.get_secret_value()))
 
 scheduler = TaskiqScheduler(
     broker=broker,

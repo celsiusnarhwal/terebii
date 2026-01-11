@@ -43,7 +43,7 @@ def sonarr() -> httpx.AsyncClient:
     )
 
     return httpx.AsyncClient(
-        base_url=settings().sonarr_url.encoded_string().rstrip("/") + "/api/v3",
+        base_url=str(settings().sonarr_url).rstrip("/") + "/api/v3",
         headers=headers,
         params=params,
         auth=auth,
