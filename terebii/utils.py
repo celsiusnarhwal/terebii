@@ -63,7 +63,8 @@ def handle_sonarr_request_error(exception: httpx.HTTPError):
         case httpx.HTTPStatusError():
             if exception.response.status_code == 401:
                 logger.critical(
-                    f"Invalid API key for {settings().sonarr_url}. Check TEREBII_SONARR_API_KEY."
+                    f"{settings().sonarr_url} is rejecting requests from Terebii. Check TEREBII_SONARR_API_KEY and, "
+                    f"if necessary, TEREBII_SONARR_USERNAME and TEREBII_SONARR_PASSWORD."
                 )
             else:
                 logger.critical(
