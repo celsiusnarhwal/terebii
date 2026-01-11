@@ -162,7 +162,7 @@ Terebii can be configured via the following environment variables:
 
 ### Advanced settings
 
-Most people won't need to worry about these settings.
+Most people won't need to worry about these.
 
 | **Variable**                    | **Type** | **Description**                                                                                                                                                                         | **Required?** | **Default (if not required)** |
 |---------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------------|
