@@ -3,6 +3,7 @@ import typing as t
 from functools import cache
 
 import durationpy
+from httpx import Headers
 from loguru import logger
 from pydantic import (
     AnyUrl,
@@ -38,18 +39,10 @@ class TerebiiSettings(BaseSettings):
     test_notification: bool = False
     sonarr_username: str = ""
     sonarr_password: SecretStr = ""
-    sonarr_headers: dict = Field(default_factory=dict)
+    sonarr_headers: Secret[Headers] = Field(default_factory=Headers)
     redis_url: Secret[RedisDsn] = "redis://localhost"
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
     sonarr_api_key_in_url: bool = False
-
-    @field_validator("sonarr_headers")
-    def validate_sonarr_headers(cls, v: dict):
-        for key in v:
-            if key.casefold() in ["x-api-key", "authorization"]:
-                v.pop(key, None)
-
-        return v
 
     @field_validator("log_level")
     @classmethod
