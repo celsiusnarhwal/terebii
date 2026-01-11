@@ -149,7 +149,7 @@ async def get_episodes():
         logger.debug(f"Calendar retrieved from {settings().sonarr_url}")
 
         logger.info(
-            f"Scheduling notifications for {len(episodes)} {inflect.plural('episode', len(episodes))} "
+            f"Found {len(episodes)} {inflect.plural('episode', len(episodes))} "
             f"airing within 24 hours ({start.to_rfc3339_string()} to {end.to_rfc3339_string()})"
         )
 
