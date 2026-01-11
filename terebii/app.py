@@ -68,7 +68,13 @@ async def send_notification(episode_id: int, exec_time: float):
         logger.debug(f"Retrieved {episode_log_str}")
 
     if not (episode["monitored"] or settings().include_unmonitored):
-        logger.info(f"{episode_log_str} is unmonitored; skipping notification")
+        logger.debug(f"{episode_log_str} is unmonitored; skipping notification")
+        return
+
+    if settings().premieres_only and episode["episodeNumber"] != 1:
+        logger.debug(
+            f"{episode_log_str} is not a season premiere; skipping notification"
+        )
         return
 
     template_variables = utils.get_episode_template_variables(episode)
