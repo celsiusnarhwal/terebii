@@ -30,7 +30,7 @@ class TerebiiSettings(BaseSettings):
     sonarr_url: HttpUrl
     sonarr_api_key: SecretStr
     notification_url: AnyUrl
-    refresh_interval: Duration = Field("1m", ge=1)
+    refresh_interval: Duration = Field("1m", ge=1, le=24 * 60 * 60)
     include_unmonitored: bool = False
     premieres_only: bool = False
     include_posters: bool = False
