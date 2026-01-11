@@ -13,6 +13,8 @@ from pydantic import (
     RedisDsn,
     Secret,
     SecretStr,
+    TypeAdapter,
+    field_serializer,
     field_validator,
 )
 from pydantic_extra_types.timezone_name import TimeZoneName
@@ -44,6 +46,15 @@ class TerebiiSettings(BaseSettings):
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
     sonarr_api_key_in_url: bool = False
 
+    @field_validator("sonarr_headers", mode="before")
+    def validate_sonarr_headers(cls, v: t.Any):
+        if isinstance(v, str):
+            return Headers(TypeAdapter(dict).validate_json(v))
+        elif isinstance(v, (dict, Headers)):
+            return Headers(v)
+
+        return v
+
     @field_validator("log_level")
     @classmethod
     def setup_logging(cls, v: str):
@@ -55,6 +66,10 @@ class TerebiiSettings(BaseSettings):
         )
 
         return v
+
+    @field_serializer("sonarr_headers")
+    def serialize_sonarr_headers(self, v: Secret[Headers]):
+        return TypeAdapter(dict[str, SecretStr]).validate_python(v.get_secret_value())
 
 
 @cache
