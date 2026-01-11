@@ -39,11 +39,11 @@ class TerebiiSettings(BaseSettings):
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
     test_notification: bool = False
+    log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
+    redis_url: Secret[RedisDsn] = "redis://localhost"
     sonarr_username: str = ""
     sonarr_password: SecretStr = ""
     sonarr_headers: Secret[Headers] = Field(default_factory=Headers)
-    redis_url: Secret[RedisDsn] = "redis://localhost"
-    log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
     sonarr_api_key_in_url: bool = False
 
     @field_validator("sonarr_headers", mode="before")
