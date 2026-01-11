@@ -32,6 +32,7 @@ class TerebiiSettings(BaseSettings):
     notification_url: AnyUrl
     refresh_interval: Duration = Field("1m", ge=1)
     include_unmonitored: bool = False
+    premieres_only: bool = False
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
     test_notification: bool = False
@@ -61,10 +62,6 @@ class TerebiiSettings(BaseSettings):
         )
 
         return v
-
-    @property
-    def tag_list(self) -> list[str]:
-        return self.tags.split(",")
 
 
 @cache

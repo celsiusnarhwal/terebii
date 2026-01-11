@@ -154,11 +154,17 @@ async def get_episodes():
         )
 
     for episode in episodes:
+        episode_log_str = utils.get_episode_log_str(episode)
+
+        if settings().premieres_only and episode["episodeNumber"] != 1:
+            logger.debug(f"{episode_log_str} is not a season premiere; skipping")
+            continue
+
         if air_date_utc := episode.get("airDateUtc"):
             air_date_utc = pendulum.parse(air_date_utc)
 
             logger.debug(
-                f"Scheduling notification for {utils.get_episode_log_str(episode)} "
+                f"Scheduling notification for {episode_log_str} "
                 f"at {utils.get_date_with_tz_log_str(air_date_utc)}"
             )
 
