@@ -40,9 +40,9 @@ class TerebiiSettings(BaseSettings):
     include_unmonitored: bool = False
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
-    test_notification: bool = False
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
     log_format: t.Literal["console", "json"] = "console"
+    test_notification: bool = False
     redis_url: Secret[RedisDsn] = "redis://localhost"
     sonarr_username: str = ""
     sonarr_password: SecretStr = ""
