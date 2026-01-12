@@ -19,7 +19,6 @@ templates = Environment(
     enable_async=True,
 )
 
-
 default_templates = Environment(loader=fs_loaders[1], enable_async=True)
 
 inflect = ifl.engine()
