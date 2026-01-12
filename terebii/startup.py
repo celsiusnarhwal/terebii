@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --directory /app/
+#!/usr/bin/env -S uv run --quiet --directory /app/
 
 import importlib.metadata
 
