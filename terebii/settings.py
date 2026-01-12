@@ -47,6 +47,7 @@ class TerebiiSettings(BaseSettings):
     sonarr_api_key_in_url: bool = False
 
     @field_validator("sonarr_headers", mode="before")
+    @classmethod
     def validate_sonarr_headers(cls, v: t.Any):
         if isinstance(v, str):
             return Headers(TypeAdapter(dict).validate_json(v))
