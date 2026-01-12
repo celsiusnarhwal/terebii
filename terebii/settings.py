@@ -75,7 +75,7 @@ class TerebiiSettings(BaseSettings):
             else:
                 log = message
 
-            print(log, file=sys.stderr)
+            print(log, file=sys.stderr, end="")
 
         logger.remove()
 
