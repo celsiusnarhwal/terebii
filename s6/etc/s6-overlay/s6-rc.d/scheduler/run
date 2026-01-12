@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-uv run --directory /app/ taskiq scheduler terebii.app:scheduler --no-configure-logging
+uv run --quiet --directory /app/ taskiq scheduler terebii.app:scheduler --no-configure-logging
