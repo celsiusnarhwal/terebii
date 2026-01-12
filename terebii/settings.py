@@ -1,3 +1,4 @@
+import json
 import sys
 import typing as t
 from functools import cache
@@ -16,6 +17,7 @@ from pydantic import (
     TypeAdapter,
     field_serializer,
     field_validator,
+    model_validator,
 )
 from pydantic_extra_types.timezone_name import TimeZoneName
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -40,6 +42,7 @@ class TerebiiSettings(BaseSettings):
     timezone: TimeZoneName = "UTC"
     test_notification: bool = False
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"
+    log_format: t.Literal["console", "json"] = "console"
     redis_url: Secret[RedisDsn] = "redis://localhost"
     sonarr_username: str = ""
     sonarr_password: SecretStr = ""
@@ -56,17 +59,35 @@ class TerebiiSettings(BaseSettings):
 
         return v
 
-    @field_validator("log_level")
-    @classmethod
-    def setup_logging(cls, v: str):
+    @model_validator(mode="after")
+    def setup_logging(self):
+        def sink(message):
+            if self.log_format == "json":
+                record = message.record
+
+                log = json.dumps(
+                    {
+                        "time": record["time"].timestamp(),
+                        "level": record["level"].name,
+                        "message": record["message"],
+                    }
+                )
+            else:
+                log = message
+
+            print(log, file=sys.stderr)
+
         logger.remove()
+
         logger.add(
-            sink=sys.stderr,
-            level=v.upper(),
+            sink=sink,
+            level=self.log_level.upper(),
             format="[Terebii] {time} | {level} — {message}",
+            colorize=True,
+            serialize=self.log_format == "json",
         )
 
-        return v
+        return self
 
     @field_serializer("sonarr_headers")
     def serialize_sonarr_headers(self, v: Secret[Headers]):
