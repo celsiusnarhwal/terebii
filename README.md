@@ -39,7 +39,7 @@ Redis server and would prefer an image that doesn't include one, append `-noredi
 
 ```yaml
 services:
-  snowflake:
+  terebii:
     image: ghcr.io/celsiusnarhwal/terebii:latest
     container_name: terebii
     restart: unless-stopped
