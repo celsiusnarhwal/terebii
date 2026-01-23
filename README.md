@@ -6,7 +6,7 @@ Pushover, ntfy, Discord, IFTTT, and [many, many, more](https://appriseit.com/ser
 
 ## Installation
 
-[Docker](https://docs.docker.com) is the only supported way of running Terebii. You must set the 
+[Docker](https://docs.docker.com/get-started) is the only supported way of running Terebii. You must set the 
 `TEREBII_SONARR_URL`, `TEREBII_SONARR_API_KEY`, and `TEREBII_NOTIFICATION_URL` environment variables; 
 see [Configuration](#configuration).
 
