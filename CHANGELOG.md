@@ -9,7 +9,7 @@ Terebii adheres to [semantic versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - The new `TEREBII_INCLUDE_DOWNLOADED` setting allows you to control whether Terebii will send notifications for
-episodes that are already downloaded.
+episodes that have already been downloaded.
 
 
 ## <a name="1-0-0">1.0.0 — 2026-1-12</a>
