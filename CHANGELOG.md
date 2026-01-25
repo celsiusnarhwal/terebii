@@ -4,7 +4,7 @@ Notable changes to Terebii are documented here.
 
 Terebii adheres to [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
-## <a = name="1-1-0">1.1.0 — 2026-01-24</a>
+## <a name="1-1-0">1.1.0 — 2026-01-24</a>
 
 ### Added
 
