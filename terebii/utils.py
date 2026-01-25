@@ -49,6 +49,27 @@ def sonarr() -> httpx.AsyncClient:
     )
 
 
+def episode_is_allowed(episode: dict, *, notification: bool = False) -> bool:
+    episode_log_str = get_episode_log_str(episode)
+    log_message_ending = "skipping notification" if notification else "skipping"
+
+    if not (episode["monitored"] or settings().include_unmonitored):
+        logger.debug(f"{episode_log_str} is not monitored; {log_message_ending}")
+        return False
+
+    if settings().premieres_only and episode["episodeNumber"] != 1:
+        logger.debug(
+            f"{episode_log_str} is not a season premiere; {log_message_ending}"
+        )
+        return False
+
+    if episode["hasFile"] and not settings().include_downloaded:
+        logger.debug(f"{episode_log_str} is already downloaded; {log_message_ending}")
+        return False
+
+    return True
+
+
 def handle_sonarr_request_error(exception: httpx.HTTPError):
     match exception:
         case (

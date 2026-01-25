@@ -38,6 +38,7 @@ class TerebiiSettings(BaseSettings):
     refresh_interval: Duration = Field("1m", ge=1, le=24 * 60 * 60)
     premieres_only: bool = False
     include_unmonitored: bool = False
+    include_downloaded: bool = True
     include_posters: bool = False
     timezone: TimeZoneName = "UTC"
     log_level: t.Literal["debug", "info", "warning", "error", "critical"] = "info"

@@ -67,14 +67,7 @@ async def send_notification(episode_id: int, exec_time: float):
 
         logger.debug(f"Retrieved {episode_log_str}")
 
-    if not (episode["monitored"] or settings().include_unmonitored):
-        logger.debug(f"{episode_log_str} is unmonitored; skipping notification")
-        return
-
-    if settings().premieres_only and episode["episodeNumber"] != 1:
-        logger.debug(
-            f"{episode_log_str} is not a season premiere; skipping notification"
-        )
+    if not utils.episode_is_allowed(episode, notification=True):
         return
 
     template_variables = utils.get_episode_template_variables(episode)
@@ -158,25 +151,22 @@ async def get_episodes():
     for episode in episodes:
         episode_log_str = utils.get_episode_log_str(episode)
 
-        if settings().premieres_only and episode["episodeNumber"] != 1:
-            logger.debug(f"{episode_log_str} is not a season premiere; skipping")
-            continue
+        if utils.episode_is_allowed(episode):
+            if air_date_utc := episode.get("airDateUtc"):
+                air_date_utc = pendulum.parse(air_date_utc)
 
-        if air_date_utc := episode.get("airDateUtc"):
-            air_date_utc = pendulum.parse(air_date_utc)
-
-            logger.debug(
-                f"Scheduling notification for {episode_log_str} "
-                f"at {utils.get_date_with_tz_log_str(air_date_utc)}"
-            )
-
-            await (
-                send_notification.kicker()
-                .with_schedule_id(str(episode["id"]))
-                .schedule_by_time(
-                    source=redis_source,
-                    time=air_date_utc,
-                    episode_id=episode["id"],
-                    exec_time=air_date_utc.float_timestamp,
+                logger.debug(
+                    f"Scheduling notification for {episode_log_str} "
+                    f"at {utils.get_date_with_tz_log_str(air_date_utc)}"
                 )
-            )
+
+                await (
+                    send_notification.kicker()
+                    .with_schedule_id(str(episode["id"]))
+                    .schedule_by_time(
+                        source=redis_source,
+                        time=air_date_utc,
+                        episode_id=episode["id"],
+                        exec_time=air_date_utc.float_timestamp,
+                    )
+                )
