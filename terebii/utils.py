@@ -64,7 +64,9 @@ def episode_is_allowed(episode: dict, *, notification: bool = False) -> bool:
         return False
 
     if episode["hasFile"] and not settings().include_downloaded:
-        logger.debug(f"{episode_log_str} is already downloaded; {log_message_ending}")
+        logger.debug(
+            f"{episode_log_str} has already been downloaded; {log_message_ending}"
+        )
         return False
 
     return True
