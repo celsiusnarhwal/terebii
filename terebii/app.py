@@ -127,19 +127,21 @@ async def get_episodes():
     async with utils.sonarr() as sonarr:
         logger.debug(f"Retrieving calendar from {settings().sonarr_url}...")
 
-        resp = await sonarr.get(
-            "/calendar",
-            params={
-                "start": start.to_rfc3339_string(),
-                "end": end.to_rfc3339_string(),
-                "unmonitored": settings().include_unmonitored,
-                "includeSeries": True,
-            },
+        episodes = (
+            (
+                await sonarr.get(
+                    "/calendar",
+                    params={
+                        "start": start.to_rfc3339_string(),
+                        "end": end.to_rfc3339_string(),
+                        "unmonitored": settings().include_unmonitored,
+                        "includeSeries": True,
+                    },
+                )
+            )
+            .raise_for_status()
+            .json()
         )
-
-        resp.raise_for_status()
-
-        episodes = resp.json()
 
         logger.debug(f"Calendar retrieved from {settings().sonarr_url}")
 
