@@ -60,7 +60,7 @@ async def send_notification(episode_id: int, exec_time: float):
             )
             return
 
-        episode = resp.raise_for_status()
+        episode = resp.raise_for_status().json()
         episode_log_str = utils.get_episode_log_str(episode)
 
         logger.debug(f"Retrieved {episode_log_str}")
