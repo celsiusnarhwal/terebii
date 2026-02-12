@@ -60,9 +60,7 @@ async def send_notification(episode_id: int, exec_time: float):
             )
             return
 
-        resp.raise_for_status()
-
-        episode = resp.json()
+        episode = resp.raise_for_status()
         episode_log_str = utils.get_episode_log_str(episode)
 
         logger.debug(f"Retrieved {episode_log_str}")
@@ -134,7 +132,6 @@ async def get_episodes():
                     params={
                         "start": start.to_rfc3339_string(),
                         "end": end.to_rfc3339_string(),
-                        "unmonitored": settings().include_unmonitored,
                         "includeSeries": True,
                     },
                 )
